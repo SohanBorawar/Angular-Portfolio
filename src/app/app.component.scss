@@ -1,0 +1,40 @@
+:host {
+    display: block;
+    width: 100%;
+}
+
+.cursor-dot, .cursor-outline {
+    position: fixed;
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+.cursor-dot {
+    width: 6px;
+    height: 6px;
+    background-color: var(--primary-accent);
+}
+
+.cursor-outline {
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(124, 111, 255, 0.5);
+    
+    :host-context(body.light-theme) & {
+        border: 1px solid rgba(91, 79, 232, 0.5);
+    }
+}
+
+// Hide default cursor globally on fine pointer devices (desktop)
+@media (pointer: fine) {
+    :host-context(body) {
+        cursor: none;
+        
+        a, button, input {
+            cursor: none;
+        }
+    }
+}

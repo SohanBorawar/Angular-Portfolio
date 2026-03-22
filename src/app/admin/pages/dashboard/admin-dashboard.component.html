@@ -1,0 +1,207 @@
+<div class="dashboard-shell">
+
+  <!-- Top Bar -->
+  <header class="dash-topbar">
+    <div class="topbar-left">
+      <div class="admin-logo">
+        <div class="logo-icon">⚡</div>
+        <div class="logo-text">
+          <span class="logo-title">Portfolio Admin</span>
+          <span class="logo-env">Local Dashboard</span>
+        </div>
+      </div>
+      <div class="topbar-divider"></div>
+      <span class="topbar-hint">
+        Edits save directly to profile-data.json
+      </span>
+    </div>
+
+    <div class="topbar-right">
+      @if(lastSaved()) {
+        <div class="save-indicator">
+          <span class="save-dot"></span>
+          Saved at {{ lastSaved() | date:'HH:mm:ss' }}
+        </div>
+      }
+      <button class="btn-topbar btn-topbar--preview" (click)="openPortfolio()">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" 
+             stroke-width="1.8" width="14" height="14">
+          <path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z"/>
+          <circle cx="8" cy="8" r="2"/>
+        </svg>
+        View Portfolio
+      </button>
+      <button class="btn-topbar btn-topbar--logout" (click)="confirmLogout()">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" 
+             stroke-width="1.8" width="14" height="14">
+          <path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3"/>
+          <polyline points="10,5 13,8 10,11"/>
+          <line x1="13" y1="8" x2="5" y2="8"/>
+        </svg>
+        Logout
+      </button>
+    </div>
+  </header>
+
+  <div class="dash-body">
+
+    <!-- Sidebar -->
+    <aside class="dash-sidebar">
+
+      <!-- User info pill -->
+      <div class="user-pill">
+        <div class="user-avatar">A</div>
+        <div class="user-info">
+          <span class="user-name">Administrator</span>
+          <span class="user-role">Full Access</span>
+        </div>
+        <div class="user-status-dot"></div>
+      </div>
+
+      <!-- Navigation -->
+      <nav class="sidebar-nav">
+        <span class="nav-section-label">Content Sections</span>
+        @for(item of navItems; track item.id) {
+          <button
+            class="nav-item"
+            [class.active]="activeTab() === item.id"
+            (click)="setTab(item.id)">
+            <span class="nav-icon">{{ item.icon }}</span>
+            <div class="nav-text">
+              <span class="nav-label">{{ item.label }}</span>
+              <span class="nav-desc">{{ item.desc }}</span>
+            </div>
+            @if(activeTab() === item.id) {
+              <span class="nav-active-bar"></span>
+            }
+          </button>
+        }
+      </nav>
+
+      <!-- Sidebar Footer -->
+      <div class="sidebar-footer">
+
+        @if(saveStatus() === 'success') {
+          <div class="status-toast status-toast--success">
+            <span>✓</span> Changes saved successfully!
+          </div>
+        }
+        @if(saveStatus() === 'error') {
+          <div class="status-toast status-toast--error">
+            <span>✗</span> Save failed. Check server.
+          </div>
+        }
+
+        <div class="server-indicator" [class.offline]="connectionError()">
+          <span class="server-dot"></span>
+          <span>{{ connectionError() ? 'Server offline' : 'API connected · port 3001' }}</span>
+        </div>
+
+        @if(connectionError()) {
+          <div class="server-help">
+            Run: <code>node admin-server.js</code>
+          </div>
+        }
+
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="dash-main">
+
+      @if(isLoading()) {
+        <div class="dash-state">
+          <div class="state-spinner"></div>
+          <p>Loading portfolio data...</p>
+        </div>
+      } @else if(connectionError()) {
+        <div class="dash-state">
+          <div class="state-icon">⚠️</div>
+          <h2>Admin Server Not Running</h2>
+          <p>Start the Express server in your terminal:</p>
+          <div class="code-block">node admin-server.js</div>
+          <p class="state-hint">Then refresh this page</p>
+        </div>
+      } @else if(profileData()) {
+
+        <div class="dash-content">
+          @switch(activeTab()) {
+            @case('profile') {
+              <app-profile-section
+                [data]="profileData()"
+                (save)="onSave($event)">
+              </app-profile-section>
+            }
+            @case('experience') {
+              <app-experience-section
+                [data]="profileData()"
+                (save)="onSave($event)">
+              </app-experience-section>
+            }
+            @case('projects') {
+              <app-projects-section
+                [data]="profileData()"
+                (save)="onSave($event)">
+              </app-projects-section>
+            }
+            @case('skills') {
+              <app-skills-section
+                [data]="profileData()"
+                (save)="onSave($event)">
+              </app-skills-section>
+            }
+            @case('contact') {
+              <app-contact-section
+                [data]="profileData()"
+                (save)="onSave($event)">
+              </app-contact-section>
+            }
+            @case('raw') {
+              <div class="raw-editor-section">
+                <div class="raw-header">
+                  <div>
+                    <h2>Raw JSON Editor</h2>
+                    <p>Edit profile-data.json directly. 
+                       Invalid JSON will show an error before saving.</p>
+                  </div>
+                </div>
+                <textarea
+                  class="raw-editor"
+                  [value]="profileData() | json"
+                  #rawEditor
+                  spellcheck="false">
+                </textarea>
+                <div class="raw-actions">
+                  <button class="btn-save" (click)="onSaveRaw(rawEditor.value)">
+                    💾 Save Raw JSON
+                  </button>
+                </div>
+              </div>
+            }
+          }
+        </div>
+
+      }
+    </main>
+  </div>
+
+  <!-- Logout Confirmation Modal -->
+  @if(showLogoutConfirm()) {
+    <div class="modal-overlay" (click)="cancelLogout()">
+      <div class="modal-card" (click)="$event.stopPropagation()">
+        <div class="modal-icon">🚪</div>
+        <h3>Sign Out?</h3>
+        <p>You'll need to sign in again to access the admin dashboard.</p>
+        <div class="modal-actions">
+          <button class="btn-modal btn-modal--cancel" (click)="cancelLogout()">
+            Cancel
+          </button>
+          <button class="btn-modal btn-modal--confirm" (click)="logout()">
+            Yes, Sign Out
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+</div>

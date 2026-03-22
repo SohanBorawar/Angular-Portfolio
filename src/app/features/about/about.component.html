@@ -1,0 +1,130 @@
+<section id="about" class="about-section" appScrollReveal>
+
+  <div class="about-container">
+
+    <!-- ── LEFT — Image Column ── -->
+    <div class="about-image-col">
+
+      <!-- Image wrapper with glow — NO hard border -->
+      <div class="profile-image-wrap">
+  
+        <!-- Glow background -->
+        <div class="profile-glow"></div>
+
+        <!-- Profile image — NO @if wrapper, always render img tag -->
+        <img
+          [src]="getProfileImage()"
+          [alt]="(profileData()?.profile?.name || 'Developer') + ' profile photo'"
+          class="profile-img"
+          loading="eager"
+          fetchpriority="high"
+          width="380"
+          height="420"
+          (error)="onImageError($event)"
+        />
+
+        <!-- Floating stat chips -->
+        <div class="stat-chip stat-chip--tl">
+          <span class="stat-chip-value">5+</span>
+          <span class="stat-chip-label">Years Exp.</span>
+        </div>
+
+        <div class="stat-chip stat-chip--tr">
+          <span class="stat-chip-value">99%</span>
+          <span class="stat-chip-label">Uptime SLA</span>
+        </div>
+
+        <div class="stat-chip stat-chip--br">
+          <span class="stat-chip-value">20+</span>
+          <span class="stat-chip-label">IoT Projects</span>
+        </div>
+
+      </div>
+
+    </div>
+    <!-- end about-image-col -->
+
+    <!-- ── RIGHT — Content Column ── -->
+    <div class="about-content-col">
+
+      <div class="section-badge">
+        <span class="badge-dot"></span>
+        About Me
+      </div>
+
+      <h2 class="about-heading">
+        Bridging Physical Devices
+        <span class="gradient-text"> with Digital Intelligence</span>
+      </h2>
+
+      <div class="about-bio">
+        @if(profileData()?.bio) {
+          <p>{{ profileData()!.bio }}</p>
+        } @else {
+          <p>
+            I'm an IoT Developer specializing in building scalable, 
+            real-time device management systems using ThingsBoard. 
+            I architect end-to-end solutions from hardware integration 
+            to cloud dashboards, ensuring reliable telemetry pipelines 
+            that handle thousands of connected devices.
+          </p>
+          <p>
+            My expertise spans MQTT protocol design, time-series data 
+            storage with PostgreSQL and Redis, containerized deployments 
+            with Docker, and real-time visualization with Grafana. 
+            I'm passionate about making IoT infrastructure that scales 
+            without compromising reliability.
+          </p>
+        }
+      </div>
+
+      <!-- Key stats row -->
+      <div class="about-stats-row">
+        <div class="about-stat">
+          <span class="about-stat-value gradient-text">50+</span>
+          <span class="about-stat-label">IoT Projects</span>
+        </div>
+        <div class="about-stat-divider"></div>
+        <div class="about-stat">
+          <span class="about-stat-value gradient-text">10K+</span>
+          <span class="about-stat-label">Devices Managed</span>
+        </div>
+        <div class="about-stat-divider"></div>
+        <div class="about-stat">
+          <span class="about-stat-value gradient-text">15+</span>
+          <span class="about-stat-label">Countries</span>
+        </div>
+      </div>
+
+      <!-- Tech highlights -->
+      <div class="about-tags">
+        @for(tag of techTags; track tag) {
+          <span class="about-tag">{{ tag }}</span>
+        }
+      </div>
+
+      <!-- CTA buttons -->
+      <div class="about-cta-row">
+        <a href="#" class="about-btn about-btn--primary" download>
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" 
+               stroke-width="1.8" width="16" height="16">
+            <path d="M10 2v11M6 9l4 4 4-4"/>
+            <path d="M3 17h14"/>
+          </svg>
+          Download CV
+        </a>
+        <a href="#contact" class="about-btn about-btn--ghost">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" 
+               stroke-width="1.8" width="16" height="16">
+            <path d="M2 4h16v12a2 2 0 01-2 2H4a2 2 0 01-2-2V4z"/>
+            <path d="M2 4l8 7 8-7"/>
+          </svg>
+          Get In Touch
+        </a>
+      </div>
+
+    </div>
+    <!-- end about-content-col -->
+
+  </div>
+</section>

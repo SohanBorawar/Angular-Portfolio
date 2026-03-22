@@ -1,0 +1,122 @@
+<mat-toolbar class="navbar entrance-animation" [class.scrolled]="isScrolled()" color="transparent">
+    @if (profileData(); as data) {
+    <div class="container navbar-container">
+
+        <div class="navbar-brand">
+            <a (click)="scrollTo('top')">{{ data.profile.name }}<span>.</span></a>
+        </div>
+
+        <div class="nav-links desktop-only">
+            @for (link of navLinks; track link.label) {
+            <a class="nav-link" [class.active]="activeSection() === link.frag" (click)="scrollTo(link.frag)">{{ link.label }}</a>
+            }
+
+            <button class="nav-action-btn" mat-stroked-button (click)="scrollTo('contact')">Hire Me</button>
+
+            <button 
+              class="theme-toggle-btn"
+              (click)="toggleTheme()"
+              [attr.aria-label]="isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'"
+              [attr.title]="isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'">
+
+              @if(isDarkMode()) {
+                <!-- SUN icon — shown in dark mode to switch TO light -->
+                <svg xmlns="http://www.w3.org/2000/svg" 
+                     viewBox="0 0 24 24" 
+                     fill="none" 
+                     stroke="currentColor" 
+                     stroke-width="2" 
+                     stroke-linecap="round" 
+                     stroke-linejoin="round"
+                     width="18" height="18">
+                  <circle cx="12" cy="12" r="5"/>
+                  <line x1="12" y1="1"  x2="12" y2="3"/>
+                  <line x1="12" y1="21" x2="12" y2="23"/>
+                  <line x1="4.22" y1="4.22"   x2="5.64"  y2="5.64"/>
+                  <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                  <line x1="1"  y1="12" x2="3"  y2="12"/>
+                  <line x1="21" y1="12" x2="23" y2="12"/>
+                  <line x1="4.22"  y1="19.78" x2="5.64"  y2="18.36"/>
+                  <line x1="18.36" y1="5.64"  x2="19.78" y2="4.22"/>
+                </svg>
+              } @else {
+                <!-- MOON icon — shown in light mode to switch TO dark -->
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     width="18" height="18">
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 
+                           7 7 0 0 0 21 12.79z"/>
+                </svg>
+              }
+            </button>
+        </div>
+
+        <!-- Mobile Menu Triggers -->
+        <div class="mobile-only">
+            <button 
+              class="theme-toggle-btn"
+              style="margin-right: 8px;"
+              (click)="toggleTheme()"
+              [attr.aria-label]="isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'"
+              [attr.title]="isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'">
+
+              @if(isDarkMode()) {
+                <!-- SUN icon — shown in dark mode to switch TO light -->
+                <svg xmlns="http://www.w3.org/2000/svg" 
+                     viewBox="0 0 24 24" 
+                     fill="none" 
+                     stroke="currentColor" 
+                     stroke-width="2" 
+                     stroke-linecap="round" 
+                     stroke-linejoin="round"
+                     width="18" height="18">
+                  <circle cx="12" cy="12" r="5"/>
+                  <line x1="12" y1="1"  x2="12" y2="3"/>
+                  <line x1="12" y1="21" x2="12" y2="23"/>
+                  <line x1="4.22" y1="4.22"   x2="5.64"  y2="5.64"/>
+                  <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                  <line x1="1"  y1="12" x2="3"  y2="12"/>
+                  <line x1="21" y1="12" x2="23" y2="12"/>
+                  <line x1="4.22"  y1="19.78" x2="5.64"  y2="18.36"/>
+                  <line x1="18.36" y1="5.64"  x2="19.78" y2="4.22"/>
+                </svg>
+              } @else {
+                <!-- MOON icon — shown in light mode to switch TO dark -->
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     width="18" height="18">
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 
+                           7 7 0 0 0 21 12.79z"/>
+                </svg>
+              }
+            </button>
+            <button class="hamburger-btn" [class.open]="isMobileMenuOpen()" (click)="toggleMobileMenu()" aria-label="Menu">
+                <span class="bar bar-1"></span>
+                <span class="bar bar-2"></span>
+                <span class="bar bar-3"></span>
+            </button>
+        </div>
+
+    </div>
+    
+    <!-- Mobile Dropdown Menu -->
+    <div class="mobile-menu-dropdown" [class.open]="isMobileMenuOpen()">
+        <div class="mobile-menu-content">
+            @for (link of navLinks; track link.label) {
+            <a class="nav-link" [class.active]="activeSection() === link.frag" (click)="scrollTo(link.frag)">{{ link.label }}</a>
+            }
+            <button class="nav-action-btn mobile-cta" mat-stroked-button (click)="scrollTo('contact')">Hire Me</button>
+        </div>
+    </div>
+    }
+</mat-toolbar>

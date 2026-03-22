@@ -1,0 +1,61 @@
+<section id="projects" class="projects-section">
+
+  <div class="projects-container">
+
+    <!-- Section Header -->
+    <div class="section-header-wrap">
+      <div class="section-badge">
+        <span class="badge-dot"></span>
+        My Work
+      </div>
+      <h2 class="section-heading">
+        Featured
+        <span class="gradient-text"> Projects</span>
+      </h2>
+      <p class="section-subtext">
+        Real-world IoT solutions built with modern 
+        technologies and best practices
+      </p>
+    </div>
+
+    <!-- Filter Tabs -->
+    @if(filters().length > 1) {
+      <div class="filter-tabs">
+        @for(filter of filters(); track filter) {
+          <button
+            class="filter-tab"
+            [class.active]="activeFilter() === filter"
+            (click)="setFilter(filter)">
+            {{ filter }}
+          </button>
+        }
+      </div>
+    }
+
+    <!-- Projects Grid -->
+    @if(filteredProjects().length > 0) {
+      <div class="projects-grid">
+        @for(project of filteredProjects(); track project.title) {
+          <app-project-card [project]="project">
+          </app-project-card>
+        }
+      </div>
+    } @else if(allProjects().length === 0) {
+      <!-- No projects in JSON at all -->
+      <div class="empty-state">
+        <div class="empty-icon">🚀</div>
+        <h3>No projects yet</h3>
+        <p>Add projects via the admin panel at 
+           <code>/admin</code></p>
+      </div>
+    } @else {
+      <!-- Filter returned no results -->
+      <div class="empty-state">
+        <div class="empty-icon">🔍</div>
+        <h3>No projects match this filter</h3>
+        <p>Try selecting a different category</p>
+      </div>
+    }
+
+  </div>
+</section>

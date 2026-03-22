@@ -1,0 +1,74 @@
+﻿[1mInitial chunk files[22m  [2m | [22m[1mNames[22m        [2m | [22m [1mRaw size[22m[2m | [22m[1mEstimated transfer size[22m
+[32mmain-3VLDGH5T.js[39m     [2m | [22m[2mmain[22m         [2m | [22m[36m488.87 kB[39m[2m | [22m               [36m94.30 kB[39m
+[32mchunk-KL6ZSJTL.js[39m    [2m | [22m[2m-[22m            [2m | [22m[36m161.59 kB[39m[2m | [22m               [36m47.39 kB[39m
+[32mpolyfills-B6TNHZQ6.js[39m[2m | [22m[2mpolyfills[22m    [2m | [22m [36m34.58 kB[39m[2m | [22m               [36m11.32 kB[39m
+[32mstyles-V4ZLFTUC.css[39m  [2m | [22m[2mstyles[22m       [2m | [22m  [36m5.02 kB[39m[2m | [22m                [36m1.30 kB[39m
+
+[1m [22m                    [2m | [22m[1mInitial total[22m[2m | [22m[1m690.05 kB[22m[2m | [22m              [1m154.31 kB[22m
+
+[1mLazy chunk files[22m     [2m | [22m[1mNames[22m        [2m | [22m [1mRaw size[22m[2m | [22m[1mEstimated transfer size[22m
+[32mchunk-KKCJIJYX.js[39m    [2m | [22m[2mbrowser[22m      [2m | [22m [36m64.03 kB[39m[2m | [22m               [36m17.11 kB[39m
+
+Application bundle generation complete. [7.313 seconds]
+
+node.exe : 
+[1m[33m[33mΓû▓ [43;
+33m[[43;30mWARNING[43
+;33m][0m 
+[1mTS-998113: 
+TechIconComponent is 
+not used within the 
+template of 
+HeroComponent[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Users\Sohan\AppData
+\Roaming\ ...
++ ~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~
+    + CategoryInfo     
+         : 
+NotSpecified:     
+([1m[33m[33mΓ...r   
+ -compiler][0m:Strin  
+  g) [], RemoteExcepti 
+   on
+    + 
+FullyQualifiedErro    
+rId : NativeCommandE   
+ rror
+ 
+
+    src/app/features/he
+ro/hero.component.ts:13
+:66:
+[37m      13 Γöé 
+...odule, 
+MatButtonModule, 
+ScrollRevealDirective, 
+[32mTechIconComponent
+[37m],
+         Γò╡           
+                       
+                 [32m~
+~~~~~~~~~~~~~~~~[0m
+
+
+[33mΓû▓ [43;33m[[43;
+30mWARNING[43;33m][0m
+ [1msrc/app/features/h
+ero/hero.component.scss
+ exceeded maximum 
+budget. Budget 8.00 kB 
+was not met by 1.73 kB 
+with a total of 9.73 
+kB.[0m
+
+[39m[22m
+Output location: C:\Users\Sohan\Desktop\Portfolio Web\ng-portfolio\dist\ng-portfolio
+

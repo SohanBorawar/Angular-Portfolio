@@ -1,0 +1,41 @@
+<div class="section-wrap">
+  <div class="section-header">
+    <div class="section-icon">🛠️</div>
+    <div>
+      <h2>Skills</h2>
+      <p>Tech stack grouped by category</p>
+    </div>
+    <button class="btn-add" type="button" (click)="addGroup()">
+      + Add Category
+    </button>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div formArrayName="skillGroups" class="skills-grid">
+
+      @for(group of skillGroups.controls; track $index) {
+        <div class="skill-group-card" [formGroupName]="$index">
+          <div class="skill-group-header">
+            <input formControlName="category" class="form-input category-input"
+                   placeholder="Category (e.g. IoT Platforms)"/>
+            <button type="button" class="btn-remove" 
+                    (click)="removeGroup($index)">🗑️</button>
+          </div>
+          <div class="field-group">
+            <label class="field-label">Skills</label>
+            <textarea formControlName="skills" 
+                      class="form-input form-textarea" rows="3"
+                      placeholder="ThingsBoard, MQTT, Node-RED (comma separated)">
+            </textarea>
+            <span class="field-hint">Separate each skill with a comma</span>
+          </div>
+        </div>
+      }
+
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn-save">💾 Save Skills</button>
+    </div>
+  </form>
+</div>

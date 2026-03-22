@@ -1,0 +1,40 @@
+<footer class="footer">
+    <div class="footer-bg-wrapper">
+        <div class="footer-glow"></div>
+        <div class="footer-grid"></div>
+    </div>
+    
+    @if (profileData(); as data) {
+    <div class="container footer-content" appScrollReveal>
+        <div class="footer-main">
+            <h2 class="footer-title">Let's build something <span class="gradient-text">extraordinary.</span></h2>
+            <div class="footer-links">
+                @for (social of data.social | keyvalue; track social.key) {
+                    <a [href]="social.value" target="_blank" rel="noopener noreferrer" class="footer-link">
+                        <span class="link-text" style="text-transform: capitalize;">{{ social.key }}</span>
+                        <svg class="link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="7" y1="17" x2="17" y2="7"></line>
+                            <polyline points="7 7 17 7 17 17"></polyline>
+                        </svg>
+                    </a>
+                }
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="copyright">
+                <p>© {{ currentYear }} {{ data.profile.name }}</p>
+                <p class="role-text">{{ data.profile.title }}</p>
+            </div>
+            
+            <!-- Back to top button -->
+            <button class="back-to-top" (click)="scrollToTop()" aria-label="Back to top">
+                <svg viewBox="0 0 24 24" fill="none" class="icon-up" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="19" x2="12" y2="5"></line>
+                    <polyline points="5 12 12 5 19 12"></polyline>
+                </svg>
+            </button>
+        </div>
+    </div>
+    }
+</footer>

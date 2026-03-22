@@ -1,0 +1,207 @@
+/* src/styles.scss */
+@use '@angular/material' as mat;
+
+@use 'app/core/styles/variables';
+@use 'app/core/styles/typography';
+@use 'app/core/styles/animations';
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-primary);
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color var(--transition-base), color var(--transition-base), border-color var(--transition-base);
+    line-height: 1.6;
+    overflow-x: hidden;
+
+    &::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        pointer-events: none;
+        background: radial-gradient(circle at top left, rgba(242, 149, 89, 0.05), transparent 40%),
+            radial-gradient(circle at bottom right, rgba(242, 212, 146, 0.08), transparent 40%);
+
+        :host-context(body.light-theme) & {
+            background: radial-gradient(circle at top right, rgba(242, 149, 89, 0.12), transparent 60%);
+        }
+    }
+}
+
+/* Material Override Base */
+.mat-mdc-button,
+.mat-mdc-raised-button,
+.mat-mdc-flat-button,
+.mat-mdc-stroked-button {
+    font-family: var(--font-primary) !important;
+    border-radius: var(--radius-sm) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast) !important;
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 50%;
+        height: 100%;
+        background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0) 100%);
+        transform: skewX(-20deg);
+    }
+
+    &:hover {
+        transform: scale(1.04) translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    &:hover::after {
+        animation: shine-sweep 1s ease;
+    }
+}
+
+:host-context(body.dark-theme) .mat-mdc-button:hover,
+:host-context(body.dark-theme) .mat-mdc-raised-button:hover,
+:host-context(body.dark-theme) .mat-mdc-flat-button:hover,
+:host-context(body.dark-theme) .mat-mdc-stroked-button:hover {
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.1);
+}
+
+@keyframes shine-sweep {
+    100% {
+        left: 200%;
+    }
+}
+
+/* Utility classes */
+.container {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+}
+
+.section {
+    padding: 120px 0; /* Updated from var(--spacing-xxl) 0 to 120px 0 */
+}
+
+@media (max-width: 992px) {
+    .section {
+        padding: 100px 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .section {
+        padding: 80px 0;
+    }
+}
+
+/* Scroll Reveal Directive Utility Classes */
+.reveal-hidden {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 800ms ease-out, transform 800ms ease-out;
+    will-change: opacity, transform;
+}
+
+.reveal-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Global Visual Overhaul Utilities */
+
+/* 1. Selection Color */
+::selection { 
+    background: rgba(124, 111, 255, 0.4); 
+    color: #F0EFFF; 
+}
+
+/* 2. Focus Rings */
+*:focus-visible {
+    outline: 2px solid var(--primary-accent) !important;
+    outline-offset: 4px;
+}
+
+/* 3. Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg-primary);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--primary-accent);
+    border-radius: 10px;
+}
+
+/* 4. Clay Morphism Global Class Setup */
+.clay-card {
+    background: var(--bg-card);
+    border-radius: 24px;
+    border: 1.5px solid rgba(255, 255, 255, 0.08);
+
+    :host-context(body.light-theme) & {
+        border: 1.5px solid rgba(0, 0, 0, 0.04);
+    }
+
+    box-shadow:
+        0 2px 0 rgba(255, 255, 255, 0.06) inset,
+        0 -2px 0 rgba(0, 0, 0, 0.2) inset,
+        0 20px 60px rgba(0, 0, 0, 0.35),
+        0 0 0 1px rgba(124, 111, 255, 0.08);
+
+    :host-context(body.light-theme) & {
+        box-shadow:
+            0 2px 0 rgba(255, 255, 255, 1) inset,
+            0 -2px 0 rgba(0, 0, 0, 0.05) inset,
+            0 20px 60px rgba(0, 0, 0, 0.08),
+            0 0 0 1px rgba(91, 79, 232, 0.08);
+    }
+
+    backdrop-filter: blur(20px);
+    transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1),
+                box-shadow 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.clay-card:hover {
+    transform: translateY(-8px) scale(1.015);
+    box-shadow:
+        0 2px 0 rgba(255, 255, 255, 0.10) inset,
+        0 -2px 0 rgba(0, 0, 0, 0.25) inset,
+        0 40px 80px rgba(0, 0, 0, 0.45),
+        0 0 60px rgba(124, 111, 255, 0.18),
+        0 0 0 1px rgba(124, 111, 255, 0.2);
+
+    :host-context(body.light-theme) & {
+        box-shadow:
+            0 2px 0 rgba(255, 255, 255, 1) inset,
+            0 -2px 0 rgba(0, 0, 0, 0.08) inset,
+            0 40px 80px rgba(0, 0, 0, 0.12),
+            0 0 60px rgba(91, 79, 232, 0.1),
+            0 0 0 1px rgba(91, 79, 232, 0.2);
+    }
+}
+
+/* 5. Prefers Reduced Motion Fallback */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}

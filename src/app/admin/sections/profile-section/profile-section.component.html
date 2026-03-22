@@ -1,0 +1,197 @@
+<div class="section-wrap">
+
+  <div class="section-header">
+    <div class="section-icon">👤</div>
+    <div class="section-header-text">
+      <h2>Profile</h2>
+      <p>Your personal information, bio, and social links</p>
+    </div>
+  </div>
+
+  @if(!data) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading profile data...</p>
+    </div>
+  } @else {
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="admin-form">
+
+    <!-- ── Avatar Preview ── -->
+    <div class="field-card">
+      <div class="field-card-title">Profile Photo</div>
+      <div class="avatar-row">
+        <div class="avatar-preview-box">
+          @if(previewUrl()) {
+            <img [src]="previewUrl()" alt="Avatar preview" 
+                 class="avatar-preview-img"
+                 (error)="previewUrl.set('')"/>
+          } @else {
+            <div class="avatar-fallback">
+              {{ form.get('name')?.value?.charAt(0)?.toUpperCase() || '?' }}
+            </div>
+          }
+        </div>
+        <div class="avatar-path-col">
+          <label class="field-label">Image Path</label>
+          <input formControlName="avatarUrl"
+                 class="form-input"
+                 placeholder="assets/profile-image.jpg"/>
+          <span class="field-hint">
+            Place image in <code>src/assets/</code> folder then 
+            enter path as: <code>assets/filename.jpg</code>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Basic Info ── -->
+    <div class="field-card">
+      <div class="field-card-title">Basic Information</div>
+      <div class="form-grid">
+
+        <div class="field-group">
+          <label class="field-label required">Full Name</label>
+          <input formControlName="name"
+                 class="form-input"
+                 [class.input-error]="isInvalid('name')"
+                 placeholder="Your full name"/>
+          @if(isInvalid('name')) {
+            <span class="field-error">Name is required</span>
+          }
+        </div>
+
+        <div class="field-group">
+          <label class="field-label required">Professional Title</label>
+          <input formControlName="title"
+                 class="form-input"
+                 [class.input-error]="isInvalid('title')"
+                 placeholder="IoT Developer & ThingsBoard Expert"/>
+          @if(isInvalid('title')) {
+            <span class="field-error">Title is required</span>
+          }
+        </div>
+
+        <div class="field-group">
+          <label class="field-label required">Email</label>
+          <input formControlName="email"
+                 type="email"
+                 class="form-input"
+                 [class.input-error]="isInvalid('email')"
+                 placeholder="you@example.com"/>
+          @if(isInvalid('email')) {
+            <span class="field-error">Valid email required</span>
+          }
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Phone</label>
+          <input formControlName="phone"
+                 class="form-input"
+                 placeholder="+91 XXXXX XXXXX"/>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Location</label>
+          <input formControlName="location"
+                 class="form-input"
+                 placeholder="India · Remote Worldwide"/>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Availability</label>
+          <select formControlName="availability" class="form-input form-select">
+            <option value="">Select status...</option>
+            <option value="Open to opportunities">Open to opportunities</option>
+            <option value="Available for freelance">Available for freelance</option>
+            <option value="Available for full-time">Available for full-time</option>
+            <option value="Currently employed">Currently employed</option>
+            <option value="Not available">Not available</option>
+          </select>
+        </div>
+
+        <div class="field-group field-group--full">
+          <label class="field-label required">Bio / Summary</label>
+          <textarea formControlName="bio"
+                    class="form-input form-textarea"
+                    [class.input-error]="isInvalid('bio')"
+                    rows="5"
+                    placeholder="Write a compelling bio about yourself...">
+          </textarea>
+          <div class="char-count">
+            {{ form.get('bio')?.value?.length || 0 }} characters
+          </div>
+          @if(isInvalid('bio')) {
+            <span class="field-error">Bio is required</span>
+          }
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── Social Links ── -->
+    <div class="field-card">
+      <div class="field-card-title">Social Links</div>
+      <div class="form-grid">
+
+        <div class="field-group">
+          <label class="field-label">
+            <span class="social-badge github">GH</span>
+            GitHub
+          </label>
+          <input formControlName="github"
+                 class="form-input"
+                 placeholder="https://github.com/username"/>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">
+            <span class="social-badge linkedin">in</span>
+            LinkedIn
+          </label>
+          <input formControlName="linkedin"
+                 class="form-input"
+                 placeholder="https://linkedin.com/in/username"/>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">
+            <span class="social-badge twitter">𝕏</span>
+            Twitter / X
+          </label>
+          <input formControlName="twitter"
+                 class="form-input"
+                 placeholder="https://twitter.com/username"/>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">
+            <span class="social-badge website">🌐</span>
+            Website
+          </label>
+          <input formControlName="website"
+                 class="form-input"
+                 placeholder="https://yourwebsite.com"/>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── Form Actions ── -->
+    <div class="form-actions">
+      @if(saveSuccess()) {
+        <div class="inline-success">
+          ✓ Profile saved successfully!
+        </div>
+      }
+      <button type="submit"
+              class="btn-save"
+              [disabled]="form.invalid || form.pristine">
+        💾 Save Profile Changes
+      </button>
+    </div>
+
+  </form>
+
+  }
+</div>

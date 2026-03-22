@@ -1,0 +1,87 @@
+:host {
+    display: block;
+}
+
+.why-section {
+    position: relative;
+    padding: 100px 0;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 80px;
+
+    h2 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 12px;
+    }
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    width: 100%;
+    margin: 0 auto;
+    perspective: 1000px;
+}
+
+.feature-card {
+    display: flex;
+    flex-direction: column;
+    padding: 32px;
+    // Uses .clay-card globally for background, border, shadow, etc.
+    // We only control layout here
+    transform-style: preserve-3d; // required for GSAP 3D children if any
+
+    .icon-wrapper {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 56px;
+        height: 56px;
+        border-radius: 14px;
+        margin-bottom: 24px;
+        background: rgba(124, 111, 255, 0.1);
+        color: var(--primary-accent);
+        transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), background 0.3s ease;
+        transform: translateZ(20px); // 3D pop effect
+        box-shadow: 0 4px 15px rgba(124, 111, 255, 0.15);
+
+        :host-context(body.light-theme) & {
+            background: rgba(91, 79, 232, 0.08);
+            box-shadow: 0 4px 10px rgba(91, 79, 232, 0.1);
+        }
+
+        svg {
+            width: 28px;
+            height: 28px;
+        }
+    }
+
+    h3 {
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 12px;
+        color: var(--text-primary);
+        letter-spacing: -0.3px;
+        transform: translateZ(10px);
+    }
+
+    p {
+        font-size: 15px;
+        line-height: 1.6;
+        color: var(--text-secondary);
+        margin: 0;
+        transform: translateZ(5px);
+    }
+
+    &:hover {
+        .icon-wrapper {
+            background: var(--accent-gradient);
+            color: #fff;
+            box-shadow: 0 8px 25px var(--hover-glow);
+        }
+    }
+}

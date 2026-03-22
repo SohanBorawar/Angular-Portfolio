@@ -1,0 +1,114 @@
+<div class="section-wrap">
+  <div class="section-header">
+    <div class="section-icon">🚀</div>
+    <div>
+      <h2>Projects</h2>
+      <p>Your portfolio projects</p>
+    </div>
+    <button class="btn-add" type="button" (click)="addProject()">
+      + Add Project
+    </button>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div formArrayName="projects" class="items-list">
+
+      @for(project of projects.controls; track $index) {
+        <div class="item-card" [formGroupName]="$index">
+
+          <div class="item-card-header" (click)="toggleExpand($index)">
+            <div class="item-card-title">
+              <span class="item-index">{{ $index + 1 }}</span>
+              <div>
+                <strong>{{ project.get('title')?.value || 'New Project' }}</strong>
+                @if(project.get('featured')?.value) {
+                  <span class="featured-badge">⭐ Featured</span>
+                }
+              </div>
+            </div>
+            <div class="item-card-actions">
+              <button type="button" class="btn-remove"
+                      (click)="$event.stopPropagation(); removeProject($index)">
+                🗑️
+              </button>
+              <span class="collapse-icon">
+                {{ expandedIndex() === $index ? '▲' : '▼' }}
+              </span>
+            </div>
+          </div>
+
+          @if(expandedIndex() === $index) {
+            <div class="item-card-body">
+              <div class="form-grid">
+
+                <div class="field-group">
+                  <label class="field-label required">Project Title</label>
+                  <input formControlName="title" class="form-input" 
+                         placeholder="ThingsBoard Fleet Manager"/>
+                </div>
+
+                <div class="field-group">
+                  <label class="field-label">Status</label>
+                  <select formControlName="status" class="form-input form-select">
+                    <option value="completed">Completed</option>
+                    <option value="in-progress">In Progress</option>
+                    <option value="archived">Archived</option>
+                  </select>
+                </div>
+
+                <div class="field-group field-group--full">
+                  <label class="field-label required">Description</label>
+                  <textarea formControlName="description" 
+                            class="form-input form-textarea" rows="3"
+                            placeholder="Describe what this project does...">
+                  </textarea>
+                </div>
+
+                <div class="field-group field-group--full">
+                  <label class="field-label">Tech Stack</label>
+                  <input formControlName="techStack" class="form-input"
+                         placeholder="Angular, ThingsBoard, MQTT, Docker (comma separated)"/>
+                  <span class="field-hint">Separate technologies with commas</span>
+                </div>
+
+                <div class="field-group">
+                  <label class="field-label">Live URL</label>
+                  <input formControlName="liveUrl" class="form-input" 
+                         placeholder="https://project.com"/>
+                </div>
+
+                <div class="field-group">
+                  <label class="field-label">GitHub URL</label>
+                  <input formControlName="githubUrl" class="form-input" 
+                         placeholder="https://github.com/username/repo"/>
+                </div>
+
+                <div class="field-group">
+                  <label class="checkbox-label">
+                    <input type="checkbox" formControlName="featured"/>
+                    ⭐ Mark as Featured Project
+                  </label>
+                </div>
+
+              </div>
+            </div>
+          }
+        </div>
+      }
+
+      @if(projects.length === 0) {
+        <div class="empty-state">
+          <p>No projects yet.</p>
+          <button type="button" class="btn-add" (click)="addProject()">
+            + Add Your First Project
+          </button>
+        </div>
+      }
+
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn-save">💾 Save Projects</button>
+    </div>
+  </form>
+</div>

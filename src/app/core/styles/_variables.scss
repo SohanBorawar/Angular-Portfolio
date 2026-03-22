@@ -1,0 +1,91 @@
+/* src/app/core/styles/_variables.scss */
+:root {
+    /* Typography Tokens */
+    --font-primary: 'Inter', sans-serif;
+
+    /* Animation Tokens */
+    --transition-fast: 200ms ease;
+    --transition-base: 250ms ease;
+
+    /* Spacing & Layout Tokens */
+    --container-width: 1200px;
+    --spacing-xxl: 120px;
+    --spacing-xl: 80px;
+    --spacing-lg: 60px;
+    --spacing-md: 24px;
+    --spacing-sm: 12px;
+    --spacing-xs: 8px;
+
+    /* Radius Tokens */
+    --radius-lg: 16px;
+    --radius-md: 16px;
+    --radius-sm: 16px;
+}
+
+body.dark-theme {
+    /* Backgrounds */
+    --bg-primary: #0D0D0F;
+    --bg-secondary: #13131A;
+    --bg-card: #1C1C28;
+
+    /* Text */
+    --text-primary: #F0EFFF;
+    --text-secondary: #A09FC0;
+    --text-muted: #5C5B7A;
+
+    /* Accent & Core Colors */
+    --primary-accent: #7C6FFF;
+    --light-accent: #FF6FD8;
+    --neutral-accent: #6FFFE9;
+
+    /* Gradients */
+    --accent-gradient: linear-gradient(135deg, #7C6FFF 0%, #FF6FD8 50%, #6FFFE9 100%);
+    --hover-glow: 0 0 40px rgba(124, 111, 255, 0.25);
+
+    /* Shadows & Elevations */
+    --elevation-1: 0px 10px 30px rgba(0, 0, 0, 0.4);
+    --elevation-2: 0px 4px 10px rgba(0, 0, 0, 0.3);
+
+    /* UI Atoms */
+    --glass-blur: blur(12px);
+    --border-subtle: 1px solid #2A2A3D;
+
+    /* Material Overrides */
+    --mdc-filled-text-field-container-color: var(--bg-card);
+    --mdc-filled-text-field-caret-color: var(--primary-accent);
+    --mdc-filled-text-field-focus-active-indicator-color: var(--primary-accent);
+}
+
+body.light-theme {
+    /* Backgrounds */
+    --bg-primary: #F4F3FF;
+    --bg-secondary: #FFFFFF;
+    --bg-card: #FFFFFF;
+
+    /* Text */
+    --text-primary: #1A1830;
+    --text-secondary: #4A4870;
+    --text-muted: #8A89A8;
+
+    /* Accent & Core Colors */
+    --primary-accent: #5B4FE8;
+    --light-accent: #D946B8;
+    --neutral-accent: #0ABFA3;
+
+    /* Gradients */
+    --accent-gradient: linear-gradient(135deg, #5B4FE8 0%, #D946B8 50%, #0ABFA3 100%);
+    --hover-glow: 0 0 40px rgba(91, 79, 232, 0.25);
+
+    /* Shadows & Elevations */
+    --elevation-1: 0 4px 12px rgba(26, 36, 48, 0.04), 0 1px 2px rgba(26, 36, 48, 0.02);
+    --elevation-2: 0 8px 24px rgba(26, 36, 48, 0.06), 0 2px 4px rgba(26, 36, 48, 0.04);
+
+    /* UI Atoms */
+    --glass-blur: blur(12px);
+    --border-subtle: 1px solid #E4E2FF;
+
+    /* Material Overrides */
+    --mdc-filled-text-field-container-color: #fff;
+    --mdc-filled-text-field-caret-color: var(--primary-accent);
+    --mdc-filled-text-field-focus-active-indicator-color: var(--primary-accent);
+}

@@ -1,0 +1,76 @@
+<div class="section-wrap">
+  <div class="section-header">
+    <div class="section-icon">📞</div>
+    <div>
+      <h2>Contact Details</h2>
+      <p>Your contact information and availability status</p>
+    </div>
+  </div>
+
+  @if(!data) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading...</p>
+    </div>
+  } @else {
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="admin-form">
+    <div class="field-card">
+      <div class="field-card-title">Contact Information</div>
+      <div class="form-grid">
+
+        <div class="field-group">
+          <label class="field-label required">Email Address</label>
+          <input formControlName="email" type="email"
+                 class="form-input"
+                 [class.input-error]="isInvalid('email')"
+                 placeholder="you@example.com"/>
+          @if(isInvalid('email')) {
+            <span class="field-error">Valid email required</span>
+          }
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Phone</label>
+          <input formControlName="phone" class="form-input"
+                 placeholder="+91 XXXXX XXXXX"/>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Location</label>
+          <input formControlName="location" class="form-input"
+                 placeholder="India · Remote Worldwide"/>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Availability Status</label>
+          <select formControlName="availability"
+                  class="form-input form-select">
+            <option value="">Select status...</option>
+            <option value="Open to opportunities">
+              Open to opportunities
+            </option>
+            <option value="Available for freelance">
+              Available for freelance
+            </option>
+            <option value="Available for full-time">Available for full-time</option>
+            <option value="Currently employed">Currently employed</option>
+            <option value="Not available">Not available</option>
+          </select>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="form-actions">
+      @if(saveSuccess()) {
+        <div class="inline-success">✓ Contact details saved!</div>
+      }
+      <button type="submit" class="btn-save" [disabled]="form.invalid || form.pristine">
+        💾 Save Contact Details
+      </button>
+    </div>
+  </form>
+
+  }
+</div>

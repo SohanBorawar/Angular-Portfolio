@@ -1,0 +1,66 @@
+:host {
+    display: inline-block;
+}
+
+.tech-icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    color: var(--text-muted);
+    transition: transform 200ms ease, color var(--transition-base), filter var(--transition-base);
+
+    svg {
+        width: 100%;
+        height: 100%;
+        fill: currentColor;
+    }
+
+    .tech-logo-img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+
+        :host-context(body.dark-theme) & {
+            filter: brightness(1.2) drop-shadow(0 0 2px rgba(255, 255, 255, 0.1));
+        }
+
+        :host-context(body.light-theme) & {
+            filter: brightness(0.9) contrast(1.2);
+        }
+    }
+
+    /* SVG specific theme overrides for tricky colors like JS yellow */
+    &.js :host-context(body.light-theme) svg {
+        color: #B59500; /* Darker yellow for light mode contrast */
+    }
+    
+    &.angular :host-context(body.light-theme) svg {
+        color: #DD0031;
+    }
+
+    &.python :host-context(body.light-theme) svg {
+        color: #306998;
+    }
+
+    &:hover {
+        transform: scale(1.1) translateY(-3px);
+        color: var(--primary-accent);
+
+        :host-context(body.dark-theme) & {
+            filter: drop-shadow(0 0 6px rgba(242, 212, 146, 0.4));
+        }
+
+        :host-context(body.light-theme) & {
+            filter: drop-shadow(0 4px 6px rgba(242, 149, 89, 0.2));
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .tech-icon-wrapper {
+        width: 24px;
+        height: 24px;
+    }
+}

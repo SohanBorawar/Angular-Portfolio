@@ -1,0 +1,131 @@
+<section id="skills" class="skills-section">
+
+  <!-- Animated background grid -->
+  <div class="skills-bg-grid"></div>
+  <div class="skills-bg-blob skills-bg-blob--1"></div>
+  <div class="skills-bg-blob skills-bg-blob--2"></div>
+
+  <div class="skills-container">
+
+    <!-- Section Header -->
+    <div class="skills-header">
+      <div class="section-badge">
+        <span class="badge-dot"></span>
+        Tech Stack
+      </div>
+      <h2 class="section-heading">
+        Skills &
+        <span class="gradient-text"> Technologies</span>
+      </h2>
+      <p class="section-subtext">
+        Tools and technologies I use to build scalable 
+        IoT solutions and real-time systems
+      </p>
+    </div>
+
+    <!-- Category Filter Tabs -->
+    @if(categories().length > 1) {
+      <div class="skills-filters">
+        <div class="filters-track">
+          @for(cat of categories(); track cat) {
+            <button
+              class="filter-pill"
+              [class.active]="activeCategory() === cat"
+              (click)="setCategory(cat)">
+              <span class="filter-pill-text">{{ cat }}</span>
+              @if(activeCategory() === cat) {
+                <span class="filter-pill-glow"></span>
+              }
+            </button>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- Skills Grid -->
+    @if(filteredSkills().length > 0) {
+      <div class="skills-grid">
+        @for(skill of filteredSkills(); track skill.name) {
+          <div class="skill-card">
+
+            <!-- Glow on hover -->
+            <div class="skill-card-glow"
+                 [style.background]="skill.color + '22'">
+            </div>
+
+            <!-- Icon -->
+            <div class="skill-icon-wrap"
+                 [style.background]="skill.color + '18'"
+                 [style.border-color]="skill.color + '40'">
+              <span class="skill-icon"
+                    [style.color]="skill.color">
+                {{ skill.icon }}
+              </span>
+            </div>
+
+            <!-- Name -->
+            <div class="skill-name">{{ skill.name }}</div>
+
+            <!-- Progress bar -->
+            <div class="skill-progress-wrap">
+              <div class="skill-progress-track">
+                <div
+                  class="skill-progress-fill"
+                  [attr.data-level]="skill.level"
+                  [style.background]="'linear-gradient(90deg,' + skill.color + ',' + skill.color + '99)'">
+                </div>
+              </div>
+              <span class="skill-level"
+                    [style.color]="skill.color">
+                {{ skill.level }}%
+              </span>
+            </div>
+
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="skills-empty">
+        <p>No skills found. Add them via the admin panel.</p>
+      </div>
+    }
+
+    <!-- Marquee Strip -->
+    @if(marqueeSkills().length > 0) {
+      <div class="skills-marquee-wrap">
+        <div class="marquee-fade-left"></div>
+        <div class="marquee-fade-right"></div>
+        <div class="marquee-track">
+          <div class="marquee-inner">
+            @for(skill of marqueeSkills(); track $index) {
+              <div class="marquee-item">
+                <span class="marquee-icon"
+                      [style.color]="skill.color">
+                  {{ skill.icon }}
+                </span>
+                <span class="marquee-name">
+                  {{ skill.name }}
+                </span>
+              </div>
+            }
+          </div>
+          <!-- Duplicate for seamless loop -->
+          <div class="marquee-inner" aria-hidden="true">
+            @for(skill of marqueeSkills(); track $index) {
+              <div class="marquee-item">
+                <span class="marquee-icon"
+                      [style.color]="skill.color">
+                  {{ skill.icon }}
+                </span>
+                <span class="marquee-name">
+                  {{ skill.name }}
+                </span>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    }
+
+  </div>
+</section>

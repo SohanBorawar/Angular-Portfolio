@@ -1,0 +1,108 @@
+<div class="section-wrap">
+  <div class="section-header">
+    <div class="section-icon">💼</div>
+    <div>
+      <h2>Experience</h2>
+      <p>Your career history and work experience</p>
+    </div>
+    <button class="btn-add" type="button" (click)="addJob()">
+      + Add Job
+    </button>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div formArrayName="jobs" class="items-list">
+
+      @for(job of jobs.controls; track $index) {
+        <div class="item-card" [formGroupName]="$index">
+
+          <div class="item-card-header" (click)="toggleExpand($index)">
+            <div class="item-card-title">
+              <span class="item-index">{{ $index + 1 }}</span>
+              <div>
+                <strong>{{ job.get('role')?.value || 'New Position' }}</strong>
+                <span class="item-subtitle">
+                  {{ job.get('company')?.value || 'Company' }}
+                </span>
+              </div>
+            </div>
+            <div class="item-card-actions">
+              <button type="button" class="btn-remove" 
+                      (click)="$event.stopPropagation(); removeJob($index)">
+                🗑️
+              </button>
+              <span class="collapse-icon">
+                {{ expandedIndex() === $index ? '▲' : '▼' }}
+              </span>
+            </div>
+          </div>
+
+          @if(expandedIndex() === $index) {
+            <div class="item-card-body">
+              <div class="form-grid">
+
+                <div class="field-group">
+                  <label class="field-label required">Company</label>
+                  <input formControlName="company" class="form-input" 
+                         placeholder="Company Name"/>
+                </div>
+
+                <div class="field-group">
+                  <label class="field-label required">Role / Title</label>
+                  <input formControlName="role" class="form-input" 
+                         placeholder="Senior IoT Developer"/>
+                </div>
+
+                <div class="field-group">
+                  <label class="field-label required">Start Date</label>
+                  <input formControlName="startDate" class="form-input" 
+                         placeholder="Jan 2022"/>
+                </div>
+
+                <div class="field-group">
+                  <label class="field-label">End Date</label>
+                  <input formControlName="endDate" class="form-input" 
+                         placeholder="Present"/>
+                  <label class="checkbox-label">
+                    <input type="checkbox" formControlName="current"/>
+                    Currently working here
+                  </label>
+                </div>
+
+                <div class="field-group">
+                  <label class="field-label">Location</label>
+                  <input formControlName="location" class="form-input" 
+                         placeholder="Remote / City, Country"/>
+                </div>
+
+                <div class="field-group field-group--full">
+                  <label class="field-label">Description</label>
+                  <textarea formControlName="description" 
+                            class="form-input form-textarea" 
+                            rows="3"
+                            placeholder="Describe your responsibilities and achievements...">
+                  </textarea>
+                </div>
+
+              </div>
+            </div>
+          }
+        </div>
+      }
+
+      @if(jobs.length === 0) {
+        <div class="empty-state">
+          <p>No experience entries yet.</p>
+          <button type="button" class="btn-add" (click)="addJob()">
+            + Add Your First Job
+          </button>
+        </div>
+      }
+
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn-save">💾 Save Experience</button>
+    </div>
+  </form>
+</div>
