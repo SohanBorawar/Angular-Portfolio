@@ -1,108 +1,364 @@
 <div class="section-wrap">
+
   <div class="section-header">
     <div class="section-icon">💼</div>
-    <div>
-      <h2>Experience</h2>
-      <p>Your career history and work experience</p>
+    <div class="section-header-text">
+      <h2>Experience & Education</h2>
+      <p>Manage your career history and education</p>
     </div>
-    <button class="btn-add" type="button" (click)="addJob()">
-      + Add Job
+  </div>
+
+  @if(!data) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading data...</p>
+    </div>
+  } @else {
+
+  <!-- Tab switcher -->
+  <div class="exp-tabs">
+    <button class="exp-tab"
+            [class.active]="activeTab() === 'jobs'"
+            (click)="setTab('jobs')">
+      💼 Work Experience
+      <span class="tab-count">{{ jobs.length }}</span>
+    </button>
+    <button class="exp-tab"
+            [class.active]="activeTab() === 'education'"
+            (click)="setTab('education')">
+      🎓 Education
+      <span class="tab-count">{{ education.length }}</span>
     </button>
   </div>
 
-  <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <div formArrayName="jobs" class="items-list">
+  <form [formGroup]="form"
+        (ngSubmit)="onSubmit()"
+        class="admin-form">
 
-      @for(job of jobs.controls; track $index) {
-        <div class="item-card" [formGroupName]="$index">
+    <!-- ── JOBS TAB ── -->
+    @if(activeTab() === 'jobs') {
+      <div class="tab-content">
 
-          <div class="item-card-header" (click)="toggleExpand($index)">
-            <div class="item-card-title">
-              <span class="item-index">{{ $index + 1 }}</span>
-              <div>
-                <strong>{{ job.get('role')?.value || 'New Position' }}</strong>
-                <span class="item-subtitle">
-                  {{ job.get('company')?.value || 'Company' }}
-                </span>
+        <div class="tab-toolbar">
+          <span class="tab-toolbar-label">
+            {{ jobs.length }} position(s)
+          </span>
+          <button type="button"
+                  class="btn-add"
+                  (click)="addJob()">
+            + Add Job
+          </button>
+        </div>
+
+        <div formArrayName="jobs" class="items-list">
+          @for(job of jobs.controls; track $index) {
+            <div class="item-card"
+                 [formGroupName]="$index">
+
+              <!-- Card Header -->
+              <div class="item-card-header"
+                   (click)="toggleJob($index)">
+                <div class="item-card-title">
+                  <span class="item-index">
+                    {{ $index + 1 }}
+                  </span>
+                  <div class="item-preview">
+                    <strong>
+                      {{ job.get('role')?.value ||
+                         'New Position' }}
+                    </strong>
+                    <span class="item-subtitle">
+                      {{ job.get('company')?.value ||
+                         'Company' }} ·
+                      {{ job.get('startDate')?.value ||
+                         'Date' }} —
+                      {{ job.get('current')?.value ?
+                         'Present' :
+                         job.get('endDate')?.value || '' }}
+                    </span>
+                  </div>
+                </div>
+                <div class="item-card-actions">
+                  <button type="button"
+                          class="btn-remove"
+                          (click)="$event.stopPropagation();
+                                   removeJob($index)">
+                    🗑️
+                  </button>
+                  <span class="collapse-icon">
+                    {{ expandedJobIndex() === $index ?
+                       '▲' : '▼' }}
+                  </span>
+                </div>
               </div>
+
+              <!-- Card Body -->
+              @if(expandedJobIndex() === $index) {
+                <div class="item-card-body">
+                  <div class="form-grid">
+
+                    <div class="field-group">
+                      <label class="field-label required">
+                        Company
+                      </label>
+                      <input formControlName="company"
+                             class="form-input"
+                             placeholder="Company Name"/>
+                    </div>
+
+                    <div class="field-group">
+                      <label class="field-label required">
+                        Role / Title
+                      </label>
+                      <input formControlName="role"
+                             class="form-input"
+                             placeholder="Senior IoT Developer"/>
+                    </div>
+
+                    <div class="field-group">
+                      <label class="field-label required">
+                        Start Date
+                      </label>
+                      <input formControlName="startDate"
+                             class="form-input"
+                             placeholder="Jan 2022"/>
+                    </div>
+
+                    <div class="field-group">
+                      <label class="field-label">
+                        End Date
+                      </label>
+                      <input formControlName="endDate"
+                             class="form-input"
+                             placeholder="Present"
+                             [disabled]="job.get('current')
+                                         ?.value"/>
+                      <label class="checkbox-label">
+                        <input type="checkbox"
+                               formControlName="current"/>
+                        Currently working here
+                      </label>
+                    </div>
+
+                    <div class="field-group">
+                      <label class="field-label">
+                        Location
+                      </label>
+                      <input formControlName="location"
+                             class="form-input"
+                             placeholder="Remote / City, Country"/>
+                    </div>
+
+                    <div class="field-group field-group--full">
+                      <label class="field-label">
+                        Description
+                      </label>
+                      <textarea formControlName="description"
+                                class="form-input form-textarea"
+                                rows="3"
+                                placeholder="Brief role description...">
+                      </textarea>
+                    </div>
+
+                    <div class="field-group field-group--full">
+                      <label class="field-label">
+                        Key Highlights
+                      </label>
+                      <textarea formControlName="highlights"
+                                class="form-input form-textarea"
+                                rows="4"
+                                placeholder="One highlight per line:
+Built real-time dashboard for 5000+ devices
+Reduced latency by 40% using Redis caching">
+                      </textarea>
+                      <span class="field-hint">
+                        Enter one achievement per line.
+                        Each line becomes a bullet point.
+                      </span>
+                    </div>
+
+                  </div>
+                </div>
+              }
+
             </div>
-            <div class="item-card-actions">
-              <button type="button" class="btn-remove" 
-                      (click)="$event.stopPropagation(); removeJob($index)">
-                🗑️
+          }
+
+          @if(jobs.length === 0) {
+            <div class="empty-state">
+              <p>No work experience added yet.</p>
+              <button type="button"
+                      class="btn-add"
+                      (click)="addJob()">
+                + Add Your First Job
               </button>
-              <span class="collapse-icon">
-                {{ expandedIndex() === $index ? '▲' : '▼' }}
-              </span>
-            </div>
-          </div>
-
-          @if(expandedIndex() === $index) {
-            <div class="item-card-body">
-              <div class="form-grid">
-
-                <div class="field-group">
-                  <label class="field-label required">Company</label>
-                  <input formControlName="company" class="form-input" 
-                         placeholder="Company Name"/>
-                </div>
-
-                <div class="field-group">
-                  <label class="field-label required">Role / Title</label>
-                  <input formControlName="role" class="form-input" 
-                         placeholder="Senior IoT Developer"/>
-                </div>
-
-                <div class="field-group">
-                  <label class="field-label required">Start Date</label>
-                  <input formControlName="startDate" class="form-input" 
-                         placeholder="Jan 2022"/>
-                </div>
-
-                <div class="field-group">
-                  <label class="field-label">End Date</label>
-                  <input formControlName="endDate" class="form-input" 
-                         placeholder="Present"/>
-                  <label class="checkbox-label">
-                    <input type="checkbox" formControlName="current"/>
-                    Currently working here
-                  </label>
-                </div>
-
-                <div class="field-group">
-                  <label class="field-label">Location</label>
-                  <input formControlName="location" class="form-input" 
-                         placeholder="Remote / City, Country"/>
-                </div>
-
-                <div class="field-group field-group--full">
-                  <label class="field-label">Description</label>
-                  <textarea formControlName="description" 
-                            class="form-input form-textarea" 
-                            rows="3"
-                            placeholder="Describe your responsibilities and achievements...">
-                  </textarea>
-                </div>
-
-              </div>
             </div>
           }
         </div>
-      }
 
-      @if(jobs.length === 0) {
-        <div class="empty-state">
-          <p>No experience entries yet.</p>
-          <button type="button" class="btn-add" (click)="addJob()">
-            + Add Your First Job
+      </div>
+    }
+
+    <!-- ── EDUCATION TAB ── -->
+    @if(activeTab() === 'education') {
+      <div class="tab-content">
+
+        <div class="tab-toolbar">
+          <span class="tab-toolbar-label">
+            {{ education.length }} education entry(s)
+          </span>
+          <button type="button"
+                  class="btn-add"
+                  (click)="addEducation()">
+            + Add Education
           </button>
         </div>
-      }
 
-    </div>
+        <div formArrayName="education" class="items-list">
+          @for(edu of education.controls; track $index) {
+            <div class="item-card"
+                 [formGroupName]="$index">
 
+              <!-- Card Header -->
+              <div class="item-card-header"
+                   (click)="toggleEdu($index)">
+                <div class="item-card-title">
+                  <span class="item-index edu-index">
+                    🎓
+                  </span>
+                  <div class="item-preview">
+                    <strong>
+                      {{ edu.get('degree')?.value ||
+                         'New Degree' }}
+                    </strong>
+                    <span class="item-subtitle">
+                      {{ edu.get('institution')?.value ||
+                         'Institution' }}
+                      @if(edu.get('endDate')?.value) {
+                        · {{ edu.get('endDate')?.value }}
+                      }
+                    </span>
+                  </div>
+                </div>
+                <div class="item-card-actions">
+                  <button type="button"
+                          class="btn-remove"
+                          (click)="$event.stopPropagation();
+                                   removeEducation($index)">
+                    🗑️
+                  </button>
+                  <span class="collapse-icon">
+                    {{ expandedEduIndex() === $index ?
+                       '▲' : '▼' }}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Card Body -->
+              @if(expandedEduIndex() === $index) {
+                <div class="item-card-body">
+                  <div class="form-grid">
+
+                    <div class="field-group">
+                      <label class="field-label required">
+                        Institution / University
+                      </label>
+                      <input formControlName="institution"
+                             class="form-input"
+                             placeholder="University Name"/>
+                    </div>
+
+                    <div class="field-group">
+                      <label class="field-label required">
+                        Degree / Qualification
+                      </label>
+                      <input formControlName="degree"
+                             class="form-input"
+                             placeholder="B.Tech / B.E / Diploma"/>
+                    </div>
+
+                    <div class="field-group">
+                      <label class="field-label">
+                        Field of Study
+                      </label>
+                      <input formControlName="field"
+                             class="form-input"
+                             placeholder="Computer Engineering"/>
+                    </div>
+
+                    <div class="field-group">
+                      <label class="field-label">
+                        Grade / GPA / Percentage
+                      </label>
+                      <input formControlName="grade"
+                             class="form-input"
+                             placeholder="8.5 CGPA / 85%"/>
+                    </div>
+
+                    <div class="field-group">
+                      <label class="field-label">
+                        Start Year
+                      </label>
+                      <input formControlName="startDate"
+                             class="form-input"
+                             placeholder="2018"/>
+                    </div>
+
+                    <div class="field-group">
+                      <label class="field-label">
+                        End Year
+                      </label>
+                      <input formControlName="endDate"
+                             class="form-input"
+                             placeholder="2022"/>
+                    </div>
+
+                    <div class="field-group field-group--full">
+                      <label class="field-label">
+                        Description
+                      </label>
+                      <textarea formControlName="description"
+                                class="form-input form-textarea"
+                                rows="3"
+                                placeholder="Additional details about your degree...">
+                      </textarea>
+                    </div>
+
+                  </div>
+                </div>
+              }
+
+            </div>
+          }
+
+          @if(education.length === 0) {
+            <div class="empty-state">
+              <p>No education entries added yet.</p>
+              <button type="button"
+                      class="btn-add"
+                      (click)="addEducation()">
+                + Add Education
+              </button>
+            </div>
+          }
+        </div>
+
+      </div>
+    }
+
+    <!-- Save Button -->
     <div class="form-actions">
-      <button type="submit" class="btn-save">💾 Save Experience</button>
+      @if(saveSuccess()) {
+        <div class="inline-success">
+          ✓ Experience & Education saved!
+        </div>
+      }
+      <button type="submit" class="btn-save">
+        💾 Save All Changes
+      </button>
     </div>
+
   </form>
+
+  }
 </div>

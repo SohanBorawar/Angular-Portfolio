@@ -37,13 +37,17 @@ export class NavbarComponent implements OnInit, OnDestroy {
     { label: 'contact', frag: 'contact' }
   ];
 
-  @HostListener('window:scroll', [])
-  onWindowScroll() {
+  private scrollListener: (() => void) | null = null;
+
+  ngAfterViewInit() {
     if (isPlatformBrowser(this.platformId)) {
-      const scrollOffset = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-      if (scrollOffset > 100 !== this.isScrolled()) {
-        this.isScrolled.set(scrollOffset > 100);
-      }
+      this.scrollListener = () => {
+        const scrollOffset = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+        if (scrollOffset > 100 !== this.isScrolled()) {
+          this.isScrolled.set(scrollOffset > 100);
+        }
+      };
+      window.addEventListener('scroll', this.scrollListener, { passive: true });
     }
   }
 
@@ -98,6 +102,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     if (this.observer) {
       this.observer.disconnect();
+    }
+    if (this.scrollListener && isPlatformBrowser(this.platformId)) {
+      window.removeEventListener('scroll', this.scrollListener);
     }
   }
 

@@ -1,5 +1,11 @@
-import { Component, Input, Output, EventEmitter, OnInit, inject, signal } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+import {
+  Component, Input, Output, EventEmitter,
+  OnInit, OnChanges, inject, signal
+} from '@angular/core';
+import {
+  ReactiveFormsModule, FormBuilder,
+  FormGroup, FormArray, Validators
+} from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -9,96 +15,201 @@ import { CommonModule } from '@angular/common';
   templateUrl: './experience-section.component.html',
   styleUrls: ['./experience-section.component.scss']
 })
-export class ExperienceSectionComponent implements OnInit {
+export class ExperienceSectionComponent
+  implements OnInit, OnChanges {
+
   @Input() data: any;
   @Output() save = new EventEmitter<any>();
 
   private fb = inject(FormBuilder);
   form!: FormGroup;
-  expandedIndex = signal<number | null>(0);
+  expandedJobIndex    = signal<number | null>(0);
+  expandedEduIndex    = signal<number | null>(null);
+  activeTab           = signal<'jobs' | 'education'>('jobs');
+  saveSuccess         = signal(false);
 
+  // Detect which field names the JSON uses
+  private _expKey = 'experience';
+  private _eduKey = 'education';
+
+  // ── Jobs FormArray ────────────────────────────────────────
   get jobs(): FormArray {
     return this.form.get('jobs') as FormArray;
   }
 
-  ngOnInit(): void {
+  // ── Education FormArray ───────────────────────────────────
+  get education(): FormArray {
+    return this.form.get('education') as FormArray;
+  }
+
+  ngOnInit(): void { this.buildForm(); }
+  ngOnChanges(): void {
+    if (this.form && this.data) this.rebuildForm();
+  }
+
+  private buildForm(): void {
     this.form = this.fb.group({
-      jobs: this.fb.array(
-        (this.data?.experience || this.data?.jobs || []).map((job: any) =>
-          this.createJobGroup(job)
-        )
-      )
+      jobs:      this.fb.array([]),
+      education: this.fb.array([])
     });
+    if (this.data) this.rebuildForm();
   }
 
+  private rebuildForm(): void {
+    // Detect experience key
+    this._expKey =
+      'experience'  in this.data ? 'experience'  :
+      'jobs'        in this.data ? 'jobs'         :
+      'workHistory' in this.data ? 'workHistory'  :
+      'work'        in this.data ? 'work'         : 'experience';
+
+    // Detect education key
+    this._eduKey =
+      'education' in this.data ? 'education' :
+      'degrees'   in this.data ? 'degrees'   :
+      'schooling' in this.data ? 'schooling' : 'education';
+
+    const expData = this.data[this._expKey] || [];
+    const eduData = this.data[this._eduKey] || [];
+
+    // Rebuild jobs array
+    const jobsArray = this.form.get('jobs') as FormArray;
+    jobsArray.clear();
+    expData.forEach((j: any) =>
+      jobsArray.push(this.createJobGroup(j))
+    );
+
+    // Rebuild education array
+    const eduArray = this.form.get('education') as FormArray;
+    eduArray.clear();
+    eduData.forEach((e: any) =>
+      eduArray.push(this.createEduGroup(e))
+    );
+  }
+
+  // ── Job Form Group ────────────────────────────────────────
   createJobGroup(job: any = {}): FormGroup {
-    let startDate = '';
-    let endDate = '';
-    
-    // Parse duration string into start and end dates
-    if (job.duration) {
-      const parts = job.duration.split(' - ');
-      if (parts.length === 2) {
-        startDate = parts[0].trim();
-        endDate = parts[1].trim();
-      } else {
-        startDate = job.duration;
-      }
-    } else {
-      startDate = job.startDate || job.start || '';
-      endDate = job.endDate || job.end || 'Present';
-    }
-
-    const current = endDate.toLowerCase() === 'present' || job.current;
-    
-    // Description is an array of strings in JSON, convert to single string for textarea
-    const descStr = Array.isArray(job.description) ? job.description.join('\n') : (job.description || '');
-
     return this.fb.group({
-      company:     [job.company || job.employer || '', Validators.required],
-      role:        [job.role || job.title || job.position || '', Validators.required],
-      startDate:   [startDate, Validators.required],
-      endDate:     [endDate, Validators.required],
-      location:    [job.location || ''],
-      description: [descStr],
-      current:     [current]
+      company:     [job.company     ||
+                    job.employer    || '', Validators.required],
+      role:        [job.role        ||
+                    job.title       ||
+                    job.position    || '', Validators.required],
+      startDate:   [job.startDate   ||
+                    job.start       || '', Validators.required],
+      endDate:     [job.endDate     ||
+                    job.end         || 'Present'],
+      current:     [job.current     ||
+                    job.endDate === 'Present' || false],
+      location:    [job.location    || ''],
+      description: [job.description ||
+                    job.summary     || ''],
+      highlights:  [Array.isArray(job.highlights)
+                    ? job.highlights.join('\n')
+                    : (job.highlights || '')],
     });
   }
 
+  // ── Education Form Group ──────────────────────────────────
+  createEduGroup(edu: any = {}): FormGroup {
+    return this.fb.group({
+      institution: [edu.institution ||
+                    edu.school      ||
+                    edu.university  || '', Validators.required],
+      degree:      [edu.degree      ||
+                    edu.title       ||
+                    edu.qualification || '', Validators.required],
+      field:       [edu.field       ||
+                    edu.major       ||
+                    edu.subject     || ''],
+      startDate:   [edu.startDate   ||
+                    edu.start       || ''],
+      endDate:     [edu.endDate     ||
+                    edu.end         ||
+                    edu.year        || ''],
+      grade:       [edu.grade       ||
+                    edu.gpa         ||
+                    edu.score       || ''],
+      description: [edu.description ||
+                    edu.summary     || ''],
+    });
+  }
+
+  // ── Job actions ───────────────────────────────────────────
   addJob(): void {
     this.jobs.push(this.createJobGroup());
-    this.expandedIndex.set(this.jobs.length - 1);
+    this.expandedJobIndex.set(this.jobs.length - 1);
+    this.activeTab.set('jobs');
   }
 
   removeJob(index: number): void {
     this.jobs.removeAt(index);
+    this.expandedJobIndex.set(null);
   }
 
-  toggleExpand(index: number): void {
-    this.expandedIndex.set(
-      this.expandedIndex() === index ? null : index
+  toggleJob(index: number): void {
+    this.expandedJobIndex.set(
+      this.expandedJobIndex() === index ? null : index
     );
   }
 
+  // ── Education actions ─────────────────────────────────────
+  addEducation(): void {
+    this.education.push(this.createEduGroup());
+    this.expandedEduIndex.set(this.education.length - 1);
+    this.activeTab.set('education');
+  }
+
+  removeEducation(index: number): void {
+    this.education.removeAt(index);
+    this.expandedEduIndex.set(null);
+  }
+
+  toggleEdu(index: number): void {
+    this.expandedEduIndex.set(
+      this.expandedEduIndex() === index ? null : index
+    );
+  }
+
+  setTab(tab: 'jobs' | 'education'): void {
+    this.activeTab.set(tab);
+  }
+
+  // ── Save ──────────────────────────────────────────────────
   onSubmit(): void {
-    const items = this.jobs.value.map((job: any) => {
-      // Reconstruct duration string
-      const end = job.current ? 'Present' : job.endDate;
-      const duration = job.startDate && end ? `${job.startDate} - ${end}` : job.startDate;
-      
-      // Reconstruct description array
-      const descArray = job.description
-        ? job.description.split('\n').map((s: string) => s.trim()).filter(Boolean)
-        : [];
+    const jobs = this.jobs.value.map((j: any) => ({
+      company:     j.company,
+      role:        j.role,
+      startDate:   j.startDate,
+      endDate:     j.current ? 'Present' : j.endDate,
+      current:     j.current,
+      location:    j.location,
+      description: j.description,
+      highlights:  j.highlights
+        ? j.highlights.split('\n')
+            .map((h: string) => h.trim())
+            .filter(Boolean)
+        : []
+    }));
 
-      return {
-        role: job.role,
-        company: job.company,
-        duration: duration,
-        description: descArray
-      };
-    });
+    const education = this.education.value.map((e: any) => ({
+      institution: e.institution,
+      degree:      e.degree,
+      field:       e.field,
+      startDate:   e.startDate,
+      endDate:     e.endDate,
+      grade:       e.grade,
+      description: e.description,
+    }));
 
-    this.save.emit({ ...this.data, experience: items });
+    const updated = {
+      ...this.data,
+      [this._expKey]: jobs,
+      [this._eduKey]: education,
+    };
+
+    this.save.emit(updated);
+    this.saveSuccess.set(true);
+    setTimeout(() => this.saveSuccess.set(false), 3000);
   }
 }

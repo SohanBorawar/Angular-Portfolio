@@ -1,67 +1,182 @@
-<section id="experience" class="experience-section section">
-    <div class="container">
-        <div class="experience-header" appScrollReveal>
-            <h2 class="text-center gradient-text">Experience & Education</h2>
-            <p class="text-center text-muted">My professional journey in architecting systems and continuous learning.</p>
+<section id="experience" class="exp-section">
+
+  <!-- Background -->
+  <div class="exp-bg-blob exp-bg-blob--1"></div>
+  <div class="exp-bg-blob exp-bg-blob--2"></div>
+
+  <div class="exp-container">
+
+    <!-- Section Header -->
+    <div class="exp-header">
+      <div class="section-badge">
+        <span class="badge-dot"></span>
+        Career
+      </div>
+      <h2 class="section-heading">
+        Experience &
+        <span class="gradient-text"> Education</span>
+      </h2>
+      <p class="section-subtext">
+        My professional journey and academic background
+      </p>
+    </div>
+
+    <!-- Work Experience Timeline -->
+    @if(experience().length > 0) {
+      <div class="timeline-wrap">
+
+        <div class="timeline-label">
+          <span class="timeline-label-icon">💼</span>
+          Work Experience
         </div>
 
         <div class="timeline">
-            <!-- GSAP animated line -->
-            <div #timelineLine class="timeline-line"></div>
 
-            @if (profileData(); as data) {
-                @for (job of data.experience; track job.company; let i = $index) {
-                <div class="timeline-item" [appScrollReveal]="i" [class.left-node]="i % 2 === 0" [class.right-node]="i % 2 !== 0">
-                    <div class="timeline-dot-wrapper">
-                        <div class="timeline-dot">
-                            <span class="company-initial">{{ job.company.charAt(0) }}</span>
-                        </div>
-                    </div>
-                    <div class="timeline-content clay-card">
-                        <div class="date-badge">
-                            <svg class="icon-briefcase" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-                                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
-                            </svg>
-                            <span>{{ job.duration }}</span>
-                        </div>
-                        <h3 class="timeline-title">{{ job.role }}</h3>
-                        <div class="timeline-company">{{ job.company }}</div>
-                        <ul class="job-description">
-                            @for (point of job.description; track point) {
-                            <li>{{ point }}</li>
-                            }
-                        </ul>
-                    </div>
-                </div>
-                }
+          <!-- Vertical line -->
+          <div class="timeline-line"></div>
 
-                @for (edu of data.education; track edu.institution; let j = $index) {
-                <div class="timeline-item" [appScrollReveal]="j + data.experience.length" [class.left-node]="(j + data.experience.length) % 2 === 0" [class.right-node]="(j + data.experience.length) % 2 !== 0">
-                    <div class="timeline-dot-wrapper">
-                        <div class="timeline-dot edu-dot">
-                            <svg viewBox="0 0 24 24" fill="none" class="edu-icon" stroke="currentColor" stroke-width="2">
-                                <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
-                                <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
-                            </svg>
-                        </div>
+          @for(job of experience(); track job.company;
+               let i = $index) {
+            <div class="timeline-item"
+                 [class.timeline-item--right]="i % 2 !== 0">
+
+              <!-- Node on line -->
+              <div class="timeline-node">
+                <div class="node-dot"></div>
+                <div class="node-pulse"></div>
+              </div>
+
+              <!-- Date badge on line -->
+              <div class="timeline-date">
+                {{ job.startDate || job.start }} —
+                {{ job.current ? 'Present' :
+                   (job.endDate || job.end || 'Present') }}
+              </div>
+
+              <!-- Card -->
+              <div class="timeline-card">
+
+                <!-- Card top accent -->
+                <div class="card-accent"></div>
+
+                <div class="card-content">
+
+                  <!-- Header -->
+                  <div class="job-header">
+                    <div class="job-company-logo">
+                      {{ (job.company || 'C')
+                         .charAt(0).toUpperCase() }}
                     </div>
-                    <div class="timeline-content clay-card">
-                        <div class="date-badge edu-badge">
-                            <span>{{ edu.year }}</span>
-                        </div>
-                        <h3 class="timeline-title">{{ edu.degree }}</h3>
-                        <div class="timeline-company">{{ edu.institution }}</div>
-                        @if (edu.description) {
-                        <ul class="job-description">
-                            <li>{{ edu.description }}</li>
-                        </ul>
+                    <div class="job-meta">
+                      <h3 class="job-role">
+                        {{ job.role  ||
+                           job.title ||
+                           job.position }}
+                      </h3>
+                      <div class="job-company-row">
+                        <span class="job-company">
+                          {{ job.company || job.employer }}
+                        </span>
+                        @if(job.location) {
+                          <span class="job-location-sep">·</span>
+                          <span class="job-location">
+                            📍 {{ job.location }}
+                          </span>
                         }
+                      </div>
                     </div>
+                    @if(job.current ||
+                        job.endDate === 'Present') {
+                      <span class="current-badge">
+                        <span class="current-dot"></span>
+                        Current
+                      </span>
+                    }
+                  </div>
+
+                  <!-- Description -->
+                  @if(job.description || job.summary) {
+                    <p class="job-description">
+                      {{ job.description || job.summary }}
+                    </p>
+                  }
+
+                  <!-- Highlights -->
+                  @if(getHighlights(job).length > 0) {
+                    <ul class="job-highlights">
+                      @for(h of getHighlights(job); track h) {
+                        <li class="job-highlight">
+                          <span class="highlight-dot"></span>
+                          {{ h }}
+                        </li>
+                      }
+                    </ul>
+                  }
+
                 </div>
-                }
-            }
+              </div>
+
+            </div>
+          }
+
         </div>
-    </div>
+      </div>
+    }
+
+    <!-- Education Section -->
+    @if(education().length > 0) {
+      <div class="education-wrap">
+
+        <div class="timeline-label">
+          <span class="timeline-label-icon">🎓</span>
+          Education
+        </div>
+
+        <div class="edu-grid">
+          @for(edu of education(); track edu.institution) {
+            <div class="edu-card">
+              <div class="edu-card-accent"></div>
+              <div class="edu-icon">🎓</div>
+              <div class="edu-content">
+                <h3 class="edu-degree">
+                  {{ $any(edu).degree || $any(edu).title || '' }}
+                </h3>
+                @if($any(edu).field) {
+                  <p class="edu-field">
+                    {{ $any(edu).field }}
+                  </p>
+                }
+                <p class="edu-institution">
+                  {{ $any(edu).institution || $any(edu).school || '' }}
+                </p>
+                <div class="edu-meta-row">
+                  @if($any(edu).startDate || $any(edu).year) {
+                    <span class="edu-year">
+                      📅
+                      @if($any(edu).startDate) {
+                        {{ $any(edu).startDate }} —
+                      }
+                      {{ $any(edu).year }}
+                    </span>
+                  }
+                  @if($any(edu).grade) {
+                    <span class="edu-grade">
+                      ⭐ {{ $any(edu).grade }}
+                    </span>
+                  }
+                </div>
+                @if($any(edu).description) {
+                  <p class="edu-description">
+                    {{ $any(edu).description }}
+                  </p>
+                }
+              </div>
+            </div>
+          }
+        </div>
+
+      </div>
+    }
+
+  </div>
 </section>

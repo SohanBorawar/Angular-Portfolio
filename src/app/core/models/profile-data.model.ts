@@ -18,15 +18,40 @@ export interface ProfileData {
         items: string[];
     }>;
     experience: Array<{
-        role: string;
-        company: string;
-        duration: string;
-        description: string[];
+        company?: string;
+        employer?: string;
+        role?: string;
+        title?: string;
+        position?: string;
+        startDate?: string;
+        start?: string;
+        endDate?: string;
+        end?: string;
+        current?: boolean;
+        location?: string;
+        description?: string;
+        summary?: string;
+        highlights?: string[] | string;
+        bullets?: string[];
     }>;
     education: Array<{
-        degree: string;
-        institution: string;
-        year: string;
+        degree?: string;
+        title?: string;
+        qualification?: string;
+        institution?: string;
+        school?: string;
+        university?: string;
+        field?: string;
+        major?: string;
+        subject?: string;
+        startDate?: string;
+        start?: string;
+        endDate?: string;
+        end?: string;
+        year?: string;
+        grade?: string;
+        gpa?: string;
+        score?: string;
         description?: string;
     }>;
     projects: Array<{

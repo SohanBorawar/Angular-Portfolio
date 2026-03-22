@@ -611,3 +611,137 @@ h1 {
         min-height: 56px;
     }
 }
+
+@media (max-width: 768px) {
+
+  .hero-section {
+    padding: 100px 20px 60px;
+    min-height: 100svh;
+  }
+
+  // Stack hero to single column
+  .hero-content,
+  .hero-inner,
+  .hero-layout,
+  .hero-wrapper,
+  [class*="hero-grid"],
+  [class*="hero-two-col"] {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 48px !important;
+    align-items: center !important;
+  }
+
+  // Left column full width
+  .hero-left,
+  .hero-text,
+  .hero-copy,
+  [class*="hero-col"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    text-align: center !important;
+    order: 1;
+  }
+
+  // Visual below text on mobile
+  .hero-right,
+  .hero-visual,
+  .hero-visual-col {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    order: 2;
+  }
+
+  // Scale down hero visual
+  .hero-visual {
+    width: 280px !important;
+    height: 280px !important;
+  }
+
+  // Center CTA buttons
+  .hero-cta,
+  .hero-buttons,
+  .cta-row {
+    justify-content: center !important;
+    flex-wrap: wrap !important;
+  }
+
+  // Center social links
+  .hero-socials,
+  .social-links {
+    justify-content: center !important;
+  }
+
+  // Stats row wraps on mobile
+  .hero-stats,
+  .stats-row {
+    justify-content: center !important;
+    flex-wrap: wrap !important;
+    gap: 16px !important;
+  }
+}
+
+// ── Three.js Canvas Mobile ────────────────────────────────────
+@media (max-width: 768px) {
+  canvas {
+    display: none !important;
+  }
+
+  // Show CSS gradient fallback instead
+  .hero-section {
+    background: radial-gradient(
+      ellipse at 20% 50%,
+      rgba(124,111,255,0.12) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse at 80% 20%,
+      rgba(255,111,216,0.08) 0%,
+      transparent 50%
+    ),
+    var(--bg-primary, #0D0D0F);
+  }
+}
+
+// ── Orbit System Mobile ───────────────────────────────────────
+@media (max-width: 480px) {
+  .orbit-ring--3 {
+    display: none !important;
+  }
+
+  .orbit-ring--2 {
+    width: 220px !important;
+    height: 220px !important;
+  }
+
+  .orbit-ring--1 {
+    width: 160px !important;
+    height: 160px !important;
+  }
+
+  .clay-blob {
+    width: 120px !important;
+    height: 120px !important;
+  }
+
+  .badge-label {
+    display: none !important;
+  }
+
+  .badge-icon {
+    font-size: 12px !important;
+  }
+}
+
+.clay-blob {
+  will-change: transform, border-radius;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.orbit-ring {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}

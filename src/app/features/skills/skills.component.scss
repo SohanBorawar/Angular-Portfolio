@@ -473,3 +473,81 @@ body.light-theme app-skills .marquee-item {
 body.light-theme app-skills .marquee-name {
   color: var(--text-secondary, #4A4870);
 }
+
+@media (max-width: 768px) {
+  app-skills .skills-container {
+    padding: 0 16px !important;
+  }
+
+  app-skills .filters-track {
+    justify-content: flex-start !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    scrollbar-width: none !important;
+    padding-bottom: 4px !important;
+    -webkit-overflow-scrolling: touch;
+
+    &::-webkit-scrollbar { display: none; }
+  }
+
+  app-skills .filter-pill {
+    flex-shrink: 0 !important;
+    padding: 6px 14px !important;
+    font-size: 12px !important;
+  }
+
+  app-skills .skills-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+
+  app-skills .skill-card {
+    padding: 14px 10px !important;
+  }
+
+  app-skills .skill-icon-wrap {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  app-skills .skill-icon {
+    font-size: 18px !important;
+  }
+
+  app-skills .skill-name {
+    font-size: 11px !important;
+  }
+
+  app-skills .skill-level {
+    font-size: 9px !important;
+  }
+
+  app-skills .marquee-item {
+    padding: 4px 12px !important;
+  }
+
+  app-skills .marquee-name {
+    font-size: 11px !important;
+  }
+}
+
+@media (max-width: 360px) {
+  app-skills .skills-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  app-skills .skill-card {
+    padding: 10px 8px !important;
+  }
+}
+
+app-skills .skill-card {
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+app-skills .marquee-track {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}

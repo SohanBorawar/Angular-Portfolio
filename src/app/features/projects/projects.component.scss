@@ -162,3 +162,37 @@ body.light-theme {
     }
   }
 }
+
+@media (max-width: 768px) {
+  .projects-container {
+    padding: 0 16px !important;
+  }
+
+  .filter-tabs {
+    justify-content: flex-start !important;
+    overflow-x: auto !important;
+    flex-wrap: nowrap !important;
+    scrollbar-width: none !important;
+    padding-bottom: 4px !important;
+    -webkit-overflow-scrolling: touch;
+
+    &::-webkit-scrollbar { display: none; }
+  }
+
+  .filter-tab {
+    flex-shrink: 0 !important;
+    padding: 6px 14px !important;
+    font-size: 12px !important;
+  }
+
+  .projects-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+}
+
+@media (min-width: 480px) and (max-width: 768px) {
+  .projects-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}

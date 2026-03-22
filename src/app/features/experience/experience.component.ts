@@ -1,64 +1,56 @@
-import { Component, ChangeDetectionStrategy, inject, AfterViewInit, ViewChild, ElementRef, OnDestroy, PLATFORM_ID, ViewEncapsulation } from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { ScrollRevealDirective } from '../../shared/directives/scroll-reveal.directive';
+import {
+  Component, inject, computed,
+  ChangeDetectionStrategy, ViewEncapsulation
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { ProfileService } from '../../core/services/profile.service';
 
 @Component({
   selector: 'app-experience',
   standalone: true,
-  imports: [CommonModule, ScrollRevealDirective],
+  imports: [CommonModule],
   templateUrl: './experience.component.html',
   styleUrls: ['./experience.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None
 })
-export class ExperienceComponent implements AfterViewInit, OnDestroy {
-  public profileData = inject(ProfileService).getProfile();
-  private platformId = inject(PLATFORM_ID);
-  
-  @ViewChild('timelineLine') timelineLine!: ElementRef;
+export class ExperienceComponent {
+  private profileService = inject(ProfileService);
+  profileData = this.profileService.profileData;
 
-  ngAfterViewInit() {
-    if (isPlatformBrowser(this.platformId)) {
-        const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (prefersReduced) return;
-        this.initGSAP();
+  experience = computed(() => {
+    const data = this.profileData();
+    if (!data) return [];
+    // Use ONLY the field name that exists in ProfileData
+    return data.experience || [];
+  });
+
+  education = computed(() => {
+    const data = this.profileData();
+    if (!data) return [];
+    // Use ONLY the field name that exists in ProfileData
+    return data.education || [];
+  });
+
+  getHighlights(job: any): string[] {
+    if (!job) return [];
+    if (Array.isArray(job.highlights))
+      return job.highlights;
+    if (typeof job.highlights === 'string')
+      return job.highlights
+        .split('\n')
+        .map((h: string) => h.trim())
+        .filter(Boolean);
+    if (Array.isArray(job.bullets))
+      return job.bullets;
+    return [];
+  }
+
+  // Add safe accessor for education fields
+  getEduField(edu: any, ...fields: string[]): string {
+    for (const f of fields) {
+      if (edu[f]) return edu[f];
     }
-  }
-
-  private async initGSAP() {
-    const { default: gsap } = await import('gsap');
-    const { default: ScrollTrigger } = await import('gsap/ScrollTrigger');
-    gsap.registerPlugin(ScrollTrigger);
-    // Small timeout to ensure DOM is settled
-    setTimeout(() => this.initTimelineAnimation(gsap), 100);
-  }
-
-  initTimelineAnimation(gsap: any) {
-    if (!this.timelineLine?.nativeElement) return;
-    
-    gsap.fromTo(this.timelineLine.nativeElement,
-        { scaleY: 0, transformOrigin: "top center" },
-        { 
-            scaleY: 1, 
-            ease: "none",
-            scrollTrigger: {
-                trigger: ".timeline",
-                start: "top center+=100",
-                end: "bottom center",
-                scrub: 0.5
-            }
-        }
-    );
-  }
-
-  ngOnDestroy() {
-    if (isPlatformBrowser(this.platformId)) {
-      import('gsap/ScrollTrigger').then(m => {
-          const ScrollTrigger = m.default;
-          ScrollTrigger.getAll().forEach((t: any) => t.kill());
-          ScrollTrigger.clearMatchMedia();
-      }).catch(e => {});
-    }
+    return '';
   }
 }

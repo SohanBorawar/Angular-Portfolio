@@ -489,3 +489,46 @@ body.light-theme {
     border-color: rgba(0,0,0,0.08);
   }
 }
+
+@media (max-width: 968px) {
+  .contact-container {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+    padding: 0 20px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-section {
+    padding: 80px 0 !important;
+  }
+
+  .contact-container {
+    padding: 0 16px !important;
+  }
+
+  .contact-form-card {
+    padding: 24px 16px !important;
+    border-radius: 16px !important;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .contact-socials {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  .social-pill {
+    font-size: 11px !important;
+    padding: 6px 12px !important;
+  }
+
+  .submit-btn {
+    padding: 13px 20px !important;
+    font-size: 13px !important;
+  }
+}
