@@ -25,18 +25,29 @@
 }
 
 .hero-container {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 60px;
-    width: 100%;
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 55fr 45fr;
+  gap: 60px;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  min-height: 100vh;
+
+  @media (max-width: 1024px) {
+    gap: 40px;
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 .hero-content {
-    flex: 0 0 55%;
-    max-width: 55%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: flex-start;
+  text-align: left;
 }
 
 .hero-badge {
@@ -243,12 +254,15 @@ h1 {
 
 /* Avatar & Abstract Clay Area */
 .hero-image {
-    flex: 0 0 45%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    height: 480px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  height: 480px;
+
+  @media (max-width: 1024px) {
+    height: 380px;
+  }
 }
 
 // ─── Hero Visual Container ───────────────────────────────────────────────────
@@ -261,9 +275,7 @@ h1 {
   justify-content: center;
   flex-shrink: 0;
 
-  @media (max-width: 1024px) { width: 400px; height: 400px; }
-  @media (max-width: 768px)  { width: 320px; height: 320px; }
-  @media (max-width: 480px)  { width: 280px; height: 280px; }
+  @media (max-width: 1024px) { width: 380px; height: 380px; }
 }
 
 // ─── Glow Rings ──────────────────────────────────────────────────────────────
@@ -306,8 +318,7 @@ h1 {
   animation: blobMorph 8s ease-in-out infinite,
              blobFloat 4s ease-in-out infinite alternate;
 
-  @media (max-width: 768px) { width: 160px; height: 160px; }
-  @media (max-width: 480px) { width: 140px; height: 140px; }
+  @media (max-width: 1024px) { width: 170px; height: 170px; }
 }
 
 @keyframes blobMorph {
@@ -430,21 +441,15 @@ h1 {
 .orbit-ring--1 {
   width: 280px; height: 280px;
   animation-duration: 14s;
-  @media (max-width: 768px) { width: 220px; height: 220px; }
-  @media (max-width: 480px) { width: 190px; height: 190px; }
 }
 .orbit-ring--2 {
   width: 370px; height: 370px;
   animation-duration: 22s;
   animation-direction: reverse;
-  @media (max-width: 768px) { width: 300px; height: 300px; }
-  @media (max-width: 480px) { width: 260px; height: 260px; }
 }
 .orbit-ring--3 {
   width: 460px; height: 460px;
   animation-duration: 32s;
-  @media (max-width: 768px) { width: 380px; height: 380px; }
-  @media (max-width: 480px) { width: 270px; height: 270px; display: none; }
 }
 
 @keyframes orbitRotate {
@@ -574,155 +579,259 @@ h1 {
 }
 
 
-@media (max-width: 992px) {
-    .hero-container {
-        flex-direction: column;
-        text-align: center;
-        padding-top: 80px;
-        gap: 40px;
-    }
-
-    .hero-content {
-        flex: 0 0 100%;
-        max-width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .hero-stats {
-        width: 100%;
-        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    }
-
-    .hero-image {
-        flex: 0 0 100%;
-        height: 400px;
-    }
-}
-
-@media (max-width: 768px) {
-    h1 {
-        font-size: 2.5rem;
-    }
-
-    .typewriter-h2 {
-        font-size: 1.5rem;
-        min-height: 56px;
-    }
-}
+// ════════════════════════════════════════════════════
+// HERO MOBILE ONLY — DO NOT EDIT ABOVE THIS LINE
+// ════════════════════════════════════════════════════
 
 @media (max-width: 768px) {
 
-  .hero-section {
-    padding: 100px 20px 60px;
-    min-height: 100svh;
+  // ── Hide Three.js canvas ────────────────────────────
+  // Canvas is too heavy for mobile CPU/GPU
+  .hero-canvas,
+  canvas {
+    display: none !important;
+    pointer-events: none !important;
   }
 
-  // Stack hero to single column
-  .hero-content,
-  .hero-inner,
-  .hero-layout,
-  .hero-wrapper,
-  [class*="hero-grid"],
-  [class*="hero-two-col"] {
+  // ── CSS gradient replaces particle background ───────
+  .hero-section {
+    background:
+      radial-gradient(
+        ellipse at 15% 40%,
+        rgba(124,111,255,0.18) 0%,
+        transparent 55%
+      ),
+      radial-gradient(
+        ellipse at 85% 60%,
+        rgba(255,111,216,0.12) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        ellipse at 50% 100%,
+        rgba(111,255,233,0.06) 0%,
+        transparent 50%
+      ),
+      var(--bg-primary, #0D0D0F) !important;
+    min-height: 100svh !important;
+    padding-top: 80px !important;
+    padding-bottom: 60px !important;
+  }
+
+  // ── Stack layout to single column ──────────────────
+  // Find the actual container class from diagnostic
+  // and add it here — common class names listed below
+  .hero-container {
     display: flex !important;
     flex-direction: column !important;
-    gap: 48px !important;
     align-items: center !important;
+    gap: 40px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
   }
 
-  // Left column full width
-  .hero-left,
-  .hero-text,
-  .hero-copy,
-  [class*="hero-col"] {
+  // ── Left text column — center aligned ──────────────
+  .hero-content {
     width: 100% !important;
     max-width: 100% !important;
     text-align: center !important;
-    order: 1;
+    align-items: center !important;
+    order: 1 !important;
+
+    // Center flex children
+    display: flex !important;
+    flex-direction: column !important;
   }
 
-  // Visual below text on mobile
-  .hero-right,
-  .hero-visual,
-  .hero-visual-col {
+  // ── Right visual column ─────────────────────────────
+  .hero-image {
     width: 100% !important;
     display: flex !important;
     justify-content: center !important;
-    order: 2;
+    align-items: center !important;
+    order: 2 !important;
   }
 
-  // Scale down hero visual
+  // ── Hero name ───────────────────────────────────────
+  h1 {
+    font-size: clamp(26px, 7.5vw, 38px) !important;
+    line-height: 1.2 !important;
+    text-align: center !important;
+  }
+
+  // ── Typewriter / role ───────────────────────────────
+  .typewriter-h2 {
+    font-size: clamp(14px, 3.8vw, 20px) !important;
+    text-align: center !important;
+    justify-content: center !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+  }
+
+  // ── Bio paragraph ───────────────────────────────────
+  .intro {
+    font-size: 13px !important;
+    line-height: 1.7 !important;
+    text-align: center !important;
+    max-width: 320px !important;
+  }
+
+  // ── CTA buttons row ─────────────────────────────────
+  .hero-cta {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+
+  // ── Individual buttons ──────────────────────────────
+  .gradient-btn,
+  .outline-btn {
+    padding: 11px 20px !important;
+    font-size: 13px !important;
+    min-width: 130px !important;
+  }
+
+  // ── Social links row ────────────────────────────────
+  .hero-social {
+    justify-content: center !important;
+    flex-wrap: wrap !important;
+  }
+
+  // ── Stats row ───────────────────────────────────────
+  .hero-stats {
+    display: flex !important;
+    justify-content: center !important;
+    flex-wrap: nowrap !important;
+    gap: 0 !important;
+    width: 100% !important;
+    max-width: 320px !important;
+    background: rgba(255,255,255,0.03) !important;
+    border-radius: 14px !important;
+    border: 1px solid rgba(255,255,255,0.06) !important;
+    padding: 12px 8px !important;
+    overflow: hidden !important;
+  }
+
+  .stat-item {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 2px !important;
+    padding: 0 4px !important;
+  }
+
+  .stat-number {
+    font-size: 20px !important;
+    font-weight: 800 !important;
+    line-height: 1 !important;
+  }
+
+  .stat-label {
+    font-size: 8px !important;
+    white-space: nowrap !important;
+    text-align: center !important;
+  }
+
+  .stat-divider {
+    width: 1px !important;
+    height: 28px !important;
+    background: rgba(255,255,255,0.08) !important;
+    flex-shrink: 0 !important;
+    align-self: center !important;
+  }
+
+  // ── Hero visual wrapper ─────────────────────────────
   .hero-visual {
-    width: 280px !important;
-    height: 280px !important;
+    width: 260px !important;
+    height: 260px !important;
+    position: relative !important;
   }
 
-  // Center CTA buttons
-  .hero-cta,
-  .hero-buttons,
-  .cta-row {
-    justify-content: center !important;
-    flex-wrap: wrap !important;
+  // ── Glow rings — simplified on mobile ──────────────
+  .glow-ring {
+    animation: none !important;
   }
 
-  // Center social links
-  .hero-socials,
-  .social-links {
-    justify-content: center !important;
+  .glow-ring--outer {
+    width: 250px !important;
+    height: 250px !important;
+    opacity: 0.25 !important;
   }
 
-  // Stats row wraps on mobile
-  .hero-stats,
-  .stats-row {
-    justify-content: center !important;
-    flex-wrap: wrap !important;
-    gap: 16px !important;
-  }
-}
-
-// ── Three.js Canvas Mobile ────────────────────────────────────
-@media (max-width: 768px) {
-  canvas {
-    display: none !important;
+  .glow-ring--inner {
+    width: 190px !important;
+    height: 190px !important;
+    opacity: 0.15 !important;
   }
 
-  // Show CSS gradient fallback instead
-  .hero-section {
-    background: radial-gradient(
-      ellipse at 20% 50%,
-      rgba(124,111,255,0.12) 0%,
-      transparent 60%
-    ),
-    radial-gradient(
-      ellipse at 80% 20%,
-      rgba(255,111,216,0.08) 0%,
-      transparent 50%
-    ),
-    var(--bg-primary, #0D0D0F);
+  // ── Clay blob — scaled down ─────────────────────────
+  .clay-blob {
+    width: 120px !important;
+    height: 120px !important;
+    // Keep morph but remove float on mobile
+    // to reduce animation overhead
+    animation: blobMorph 10s ease-in-out
+               infinite !important;
   }
-}
 
-// ── Orbit System Mobile ───────────────────────────────────────
-@media (max-width: 480px) {
+  .blob-inner {
+    border-radius: inherit !important;
+  }
+
+  .blob-title {
+    font-size: 13px !important;
+  }
+
+  .blob-subtitle {
+    font-size: 8px !important;
+    letter-spacing: 0.15em !important;
+  }
+
+  .blob-icon {
+    width: 28px !important;
+    height: 28px !important;
+    margin-bottom: 2px !important;
+  }
+
+  .blob-pulse-ring {
+    animation-duration: 3s !important;
+  }
+
+  // ── Orbit rings — scaled for mobile ────────────────
+  .orbit-system {
+    position: absolute !important;
+    width: 100% !important;
+    height: 100% !important;
+    top: 0 !important;
+    left: 0 !important;
+  }
+
+  // Inner ring — keep but smaller
+  .orbit-ring--1 {
+    width: 195px !important;
+    height: 195px !important;
+    animation-duration: 18s !important;
+  }
+
+  // Middle ring — keep but smaller
+  .orbit-ring--2 {
+    width: 255px !important;
+    height: 255px !important;
+    animation-duration: 28s !important;
+  }
+
+  // Outer ring — HIDE on mobile
   .orbit-ring--3 {
     display: none !important;
   }
 
-  .orbit-ring--2 {
-    width: 220px !important;
-    height: 220px !important;
-  }
-
-  .orbit-ring--1 {
-    width: 160px !important;
-    height: 160px !important;
-  }
-
-  .clay-blob {
-    width: 120px !important;
-    height: 120px !important;
+  // ── Badge pills — icon only on mobile ──────────────
+  .badge-content {
+    padding: 4px 6px !important;
+    gap: 0 !important;
+    min-width: unset !important;
   }
 
   .badge-label {
@@ -730,18 +839,126 @@ h1 {
   }
 
   .badge-icon {
+    font-size: 13px !important;
+  }
+
+  // ── Floating particles — hide on mobile ────────────
+  .hero-particles,
+  .particle {
+    display: none !important;
+    animation: none !important;
+  }
+
+  // ── Background blobs — static on mobile ────────────
+  [class*="hero-bg"],
+  [class*="bg-blob"] {
+    animation: none !important;
+    opacity: 0.2 !important;
+  }
+}
+
+// ── Very small screens 360-400px ─────────────────────────────
+@media (max-width: 400px) {
+
+  .hero-section {
+    padding-top: 75px !important;
+    padding-bottom: 50px !important;
+  }
+
+  .hero-container {
+    gap: 32px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  h1 {
+    font-size: clamp(24px, 7vw, 32px) !important;
+  }
+
+  .intro {
+    font-size: 12px !important;
+    max-width: 280px !important;
+  }
+
+  .hero-visual {
+    width: 220px !important;
+    height: 220px !important;
+  }
+
+  .clay-blob {
+    width: 100px !important;
+    height: 100px !important;
+  }
+
+  .orbit-ring--1 {
+    width: 165px !important;
+    height: 165px !important;
+  }
+
+  .orbit-ring--2 {
+    width: 215px !important;
+    height: 215px !important;
+  }
+
+  .glow-ring--outer {
+    width: 215px !important;
+    height: 215px !important;
+  }
+
+  .glow-ring--inner {
+    width: 160px !important;
+    height: 160px !important;
+  }
+
+  .stat-number {
+    font-size: 17px !important;
+  }
+
+  .stat-label {
+    font-size: 7px !important;
+  }
+
+  .gradient-btn,
+  .outline-btn {
+    min-width: 110px !important;
+    padding: 10px 14px !important;
     font-size: 12px !important;
   }
 }
 
-.clay-blob {
-  will-change: transform, border-radius;
-  transform: translateZ(0);
-  backface-visibility: hidden;
+// ── Tablet 769px-1024px ───────────────────────────────────────
+@media (min-width: 769px) and (max-width: 1024px) {
+
+  .hero-visual {
+    width: 360px !important;
+    height: 360px !important;
+  }
+
+  .clay-blob {
+    width: 165px !important;
+    height: 165px !important;
+  }
+
+  .orbit-ring--1 {
+    width: 240px !important;
+    height: 240px !important;
+  }
+
+  .orbit-ring--2 {
+    width: 310px !important;
+    height: 310px !important;
+  }
+
+  .orbit-ring--3 {
+    display: none !important;
+  }
+
+  .badge-label {
+    display: inline !important;
+    font-size: 9px !important;
+  }
 }
 
-.orbit-ring {
-  will-change: transform;
-  transform: translateZ(0);
-  backface-visibility: hidden;
-}
+// ════════════════════════════════════════════════════
+// END HERO MOBILE ONLY
+// ════════════════════════════════════════════════════

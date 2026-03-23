@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject, ViewChild, ElementRef, AfterViewInit, OnDestroy, OnInit, ChangeDetectorRef, PLATFORM_ID, ViewEncapsulation } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, ViewChild, ElementRef, AfterViewInit, OnDestroy, OnInit, ChangeDetectorRef, PLATFORM_ID, ViewEncapsulation, signal } from '@angular/core';
 import { CommonModule, ViewportScroller, isPlatformBrowser } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { ScrollRevealDirective } from '../../shared/directives/scroll-reveal.directive';
@@ -33,6 +33,7 @@ export class HeroComponent implements AfterViewInit, OnDestroy, OnInit {
   private platformId = inject(PLATFORM_ID);
   public profileService = inject(ProfileService);
   private el = inject(ElementRef);
+  private isMobile = signal(false);
 
   @ViewChild('statsContainer') statsContainer!: ElementRef;
   @ViewChild('heroCanvas') heroCanvas!: ElementRef<HTMLCanvasElement>;
@@ -88,8 +89,10 @@ export class HeroComponent implements AfterViewInit, OnDestroy, OnInit {
         this.observer.observe(this.statsContainer.nativeElement);
       }
       
-      const isMobile = window.innerWidth < 768;
-      if (!isMobile) {
+      this.checkMobile();
+      window.addEventListener('resize', this.onResize, { passive: true });
+      
+      if (!this.isMobile()) {
         if ('requestIdleCallback' in window) {
           (window as any).requestIdleCallback(() => {
             this.loadThreeJS();
@@ -103,6 +106,26 @@ export class HeroComponent implements AfterViewInit, OnDestroy, OnInit {
       
       this.positionOrbitBadges();
       document.addEventListener('visibilitychange', this.handleVisibilityChange);
+    }
+  }
+
+  private onResize = () => {
+    if (isPlatformBrowser(this.platformId)) {
+      this.checkMobile();
+    }
+  };
+
+  private checkMobile(): void {
+    const mobile = window.innerWidth <= 768;
+    this.isMobile.set(mobile);
+
+    // Kill Three.js if switched to mobile
+    if (mobile && this.animationFrameId) {
+      cancelAnimationFrame(this.animationFrameId);
+      this.animationFrameId = null;
+      if (this.heroCanvas?.nativeElement) {
+        this.heroCanvas.nativeElement.style.display = 'none';
+      }
     }
   }
 
@@ -130,6 +153,7 @@ export class HeroComponent implements AfterViewInit, OnDestroy, OnInit {
     
     if (isPlatformBrowser(this.platformId)) {
       document.removeEventListener('visibilitychange', this.handleVisibilityChange);
+      window.removeEventListener('resize', this.onResize);
     }
   }
 
